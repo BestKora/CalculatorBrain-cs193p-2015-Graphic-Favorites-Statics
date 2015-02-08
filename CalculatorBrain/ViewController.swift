@@ -37,7 +37,7 @@ class ViewController: UIViewController
                 displayValue = result
             } else {
                 // error?
-                displayValue = 0
+                displayValue = 0  // задание 2
             }
         }
     }
@@ -48,7 +48,7 @@ class ViewController: UIViewController
             displayValue = result
         } else {
             // error?
-            displayValue = 0
+            displayValue = 0  // задание 2
         }
     }
     

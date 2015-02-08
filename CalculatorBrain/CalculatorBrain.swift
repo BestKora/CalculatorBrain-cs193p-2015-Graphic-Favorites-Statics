@@ -42,14 +42,13 @@ class CalculatorBrain
         func learnOp (op: Op) {
             knownOps[op.description] = op
         }
-        //knownOps["×"] = Op.BinaryOperation("×") { $0 * $1 }
+       
         //knownOps["×"] = Op.BinaryOperation("×", *)
         learnOp(Op.BinaryOperation("×", *))
         knownOps["÷"] = Op.BinaryOperation("÷") { $1 / $0 }
-        //knownOps["+"] = Op.BinaryOperation("+") { $0 + $1 }
+       
         knownOps["+"] = Op.BinaryOperation("+", +)
         knownOps["−"] = Op.BinaryOperation("−") { $1 - $0 }
-        //knownOps["√"] = Op.UnaryOperation("√") { sqrt($0) }
         knownOps["√"] = Op.UnaryOperation("√", sqrt)
     }
     
@@ -92,7 +91,7 @@ class CalculatorBrain
     
     func performOperation(symbol: String) -> Double? {
         if let operation = knownOps[symbol] {
-            opStack.append(operation);
+            opStack.append(operation)
         }
         return evaluate()
     }
