@@ -59,7 +59,7 @@ class ViewController: UIViewController
     }
     
     @IBAction func enter() {
-        userIsInTheMiddleOfTypingANumber = false
+         userIsInTheMiddleOfTypingANumber = false
          userAlreadyEnteredADecimalPoint = false
         if let result = brain.pushOperand(displayValue) {
             displayValue = result
@@ -67,6 +67,12 @@ class ViewController: UIViewController
             // error?
             displayValue = 0  // задание 2
         }
+    }
+    
+    @IBAction func clearAll(sender: AnyObject) {
+        brain = CalculatorBrain()
+        displayValue = 0
+
     }
     
     var displayValue: Double {
@@ -79,6 +85,8 @@ class ViewController: UIViewController
             let stack = brain.displayStack()
             if !stack!.isEmpty {
                 history.text = stack! + " ="
+            } else {
+                history.text = ""
             }
         }
     }

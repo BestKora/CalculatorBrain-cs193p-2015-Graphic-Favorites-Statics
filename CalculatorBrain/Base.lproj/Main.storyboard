@@ -242,6 +242,9 @@
                                 <state key="normal" title="C">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="clearAll:" destination="G7H-q3-ubT" eventType="touchUpInside" id="for-ed-kxQ"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="old-SM-hGl">
                                 <rect key="frame" x="136" y="502.5" width="104" height="89.5"/>
