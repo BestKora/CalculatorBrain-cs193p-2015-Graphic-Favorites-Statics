@@ -220,7 +220,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="decimalPoint:" destination="krw-hd-XHS" eventType="touchUpInside" id="fZh-69-KfC"/>
+                                    <action selector="decimalPoint:" destination="krw-hd-XHS" eventType="touchUpInside" id="o8V-7F-dP8"/>
                                 </connections>
                             </button>
                         </subviews>
