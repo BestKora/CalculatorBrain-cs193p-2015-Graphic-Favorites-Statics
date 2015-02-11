@@ -12,6 +12,8 @@ class ViewController: UIViewController
 {
     @IBOutlet weak var display: UILabel!
     
+    @IBOutlet weak var history: UILabel!
+    
     var userIsInTheMiddleOfTypingANumber = false
     var userAlreadyEnteredADecimalPoint = false
     
@@ -22,6 +24,12 @@ class ViewController: UIViewController
 //        println("digit = \(digit)");
         
         if userIsInTheMiddleOfTypingANumber {
+//----- Уничтожаем лидирующие нули ---------------
+            if (digit == "0") && ((display.text == "0") || (display.text == "-0"))
+                                                                     { return }
+            if (digit != ".") && ((display.text == "0") || (display.text == "-0"))
+                                                  { display.text = digit ; return }
+//--------------------------------------------------
             display.text = display.text! + digit
         } else {
             display.text = digit
@@ -68,6 +76,10 @@ class ViewController: UIViewController
         set {
             display.text = "\(newValue)"
             userIsInTheMiddleOfTypingANumber = false
+            let stack = brain.displayStack()
+            if !stack!.isEmpty {
+                history.text = stack! + " ="
+            }
         }
     }
 

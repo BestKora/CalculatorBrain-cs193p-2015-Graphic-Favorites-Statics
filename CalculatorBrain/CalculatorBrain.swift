@@ -85,6 +85,11 @@ class CalculatorBrain
         return (nil, ops)
     }
     
+    func displayStack() -> String? {
+        return " ".join(opStack.map{ "\($0)" })
+    }
+
+    
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
         //let (result, _) = evaluate(opStack)
