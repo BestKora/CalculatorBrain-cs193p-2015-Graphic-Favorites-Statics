@@ -25,10 +25,8 @@ class ViewController: UIViewController
         
         if userIsInTheMiddleOfTypingANumber {
 //----- Уничтожаем лидирующие нули ---------------
-            if (digit == "0") && ((display.text == "0") || (display.text == "-0"))
-                                                                     { return }
-            if (digit != ".") && ((display.text == "0") || (display.text == "-0"))
-                                                  { display.text = digit ; return }
+            if (digit == "0") && (display.text == "0") { return }
+            if (digit != ".") && (display.text == "0") { display.text = digit ; return }
 //--------------------------------------------------
             display.text = display.text! + digit
         } else {
@@ -74,6 +72,22 @@ class ViewController: UIViewController
         displayValue = 0
 
     }
+ 
+    @IBAction func backSpace(sender: AnyObject) {
+        if userIsInTheMiddleOfTypingANumber {
+            if countElements(display.text!) > 1 {
+                display.text = dropLast(display.text!)
+//  смотрим не исчезла ли точка
+                if (display.text!.rangeOfString(".") != nil){
+                    userAlreadyEnteredADecimalPoint = false
+                }
+
+            } else {
+                display.text = "0"
+            }
+        }
+    }
+    
     
     var displayValue: Double {
         get {

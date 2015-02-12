@@ -252,6 +252,9 @@
                                 <state key="normal" title="🔙">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="backSpace:" destination="G7H-q3-ubT" eventType="touchUpInside" id="knw-gS-TDF"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0U-oa-Ytq">
                                 <rect key="frame" x="24" y="502.5" width="104" height="89.5"/>
