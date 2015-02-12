@@ -84,13 +84,30 @@ class ViewController: UIViewController
                 if (display.text!.rangeOfString(".") != nil){
                     userAlreadyEnteredADecimalPoint = false
                 }
+//   если осталось "-0" то превращаем в 0
+                if (countElements(display.text!) == 2) && (display.text?.rangeOfString("-") != nil) {
+                    display.text = "0"
+                }
+
 
             } else {
                 display.text = "0"
+                userIsInTheMiddleOfTypingANumber = false
             }
         }
     }
     
+    @IBAction func plusMinus(sender: UIButton) {
+        if userIsInTheMiddleOfTypingANumber {
+            if (display.text!.rangeOfString("-") != nil) {
+                display.text = dropFirst(display.text!)
+            } else {
+                display.text = "-" + display.text!
+            }
+        } else {
+            operate(sender)
+        }
+    }
     
     var displayValue: Double {
         get {
