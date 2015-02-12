@@ -32,7 +32,7 @@ class ViewController: UIViewController
         } else {
             display.text = digit
             userIsInTheMiddleOfTypingANumber = true
-        }
+                   }
     }
     
     @IBAction func decimalPoint(sender: UIButton) {
@@ -49,9 +49,11 @@ class ViewController: UIViewController
         if let operation = sender.currentTitle {
             if let result = brain.performOperation(operation) {
                 displayValue = result
+                 history.text =  history.text! + " ="
             } else {
                 // error?
                 displayValue = 0  // задание 2
+                history.text =  history.text! + " ERROR"
             }
         }
     }
@@ -70,6 +72,7 @@ class ViewController: UIViewController
     @IBAction func clearAll(sender: AnyObject) {
         brain = CalculatorBrain()
         displayValue = 0
+        history.text = ""
 
     }
  
@@ -96,12 +99,8 @@ class ViewController: UIViewController
         set {
             display.text = "\(newValue)"
             userIsInTheMiddleOfTypingANumber = false
-            let stack = brain.displayStack()
-            if !stack!.isEmpty {
-                history.text = stack! + " ="
-            } else {
-                history.text = ""
-            }
+            history.text = brain.displayStack()
+            
         }
     }
 
