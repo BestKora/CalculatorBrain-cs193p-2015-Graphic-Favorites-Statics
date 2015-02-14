@@ -72,7 +72,7 @@ class ViewController: UIViewController
     @IBAction func clearAll(sender: AnyObject) {
         brain = CalculatorBrain()
         displayValue = nil
-        history.text = ""
+        history.text = " "
 
     }
  
@@ -112,9 +112,7 @@ class ViewController: UIViewController
     var displayValue: Double? {
         get {
             if let displayText = display.text {
-                if let displayNumber = NSNumberFormatter().numberFromString(displayText) {
-                    return displayNumber.doubleValue
-                }
+               return NSNumberFormatter().numberFromString(displayText)?.doubleValue
             }
             return nil
         }
@@ -122,7 +120,7 @@ class ViewController: UIViewController
             if (newValue != nil) {
                 display.text = "\(newValue!)"
             } else {
-                display.text = ""
+                display.text = " "
             }
             userIsInTheMiddleOfTypingANumber = false
             history.text = brain.displayStack()
