@@ -38,7 +38,7 @@ class CalculatorBrain
 
     private var opStack = [Op]()
     
- 
+    
     private var knownOps = [String:Op]()
     
     init() {
@@ -54,7 +54,28 @@ class CalculatorBrain
         learnOp(Op.UnaryOperation("cos", cos))
         learnOp(Op.ConstantOperation("π", { M_PI }))
         learnOp(Op.UnaryOperation("±", { -$0 }))
-
+    }
+    
+    typealias PropertyList = AnyObject
+    
+    var program:PropertyList { // guaranteed to be a Property List
+        get {
+            return opStack.map{$0.description}
+        }
+        set{
+            if let opSymbols = newValue as? Array<String> {
+                
+                var newOpStack = [Op]()
+                for opSymbol in opSymbols {
+                    if let op = knownOps[opSymbol]{
+                        newOpStack.append(op)
+                    } else if let operand = NSNumberFormatter().numberFromString(opSymbol)?.doubleValue {
+                        newOpStack.append(.Operand(operand))
+                    }
+                }
+                opStack = newOpStack
+            }
+        }
     }
     
     private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op]) {
@@ -87,7 +108,7 @@ class CalculatorBrain
     }
     
     func displayStack() -> String? {
-        return " ".join(opStack.map{ "\($0)" })
+        return opStack.isEmpty ? nil : " ".join(opStack.map{ "\($0)" })
     }
 
     

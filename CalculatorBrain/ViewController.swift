@@ -14,31 +14,34 @@ class ViewController: UIViewController
     
     @IBOutlet weak var history: UILabel!
     
+    @IBOutlet weak var tochka: UIButton!
+    
+    let decimalSeparator = NSNumberFormatter().decimalSeparator ?? "."
     var userIsInTheMiddleOfTypingANumber = false
-    var userAlreadyEnteredADecimalPoint = false
     
     var brain = CalculatorBrain()
     
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
-//        println("digit = \(digit)");
+        //        println("digit = \(digit)");
         
         if userIsInTheMiddleOfTypingANumber {
-//----- Уничтожаем лидирующие нули ---------------
-            if (digit == "0") && (display.text == "0") { return }
-            if (digit != ".") && (display.text == "0") { display.text = digit ; return }
-//--------------------------------------------------
+            //----- Уничтожаем лидирующие нули ---------------
+            if (digit == "0") && ((display.text == "0") || (display.text == "-0")){ return }
+            if (digit != decimalSeparator) && ((display.text == "0")  || (display.text == "-0")) { display.text = digit ; return }
+            //--------------------------------------------------
             display.text = display.text! + digit
         } else {
-            display.text = digit
-            userIsInTheMiddleOfTypingANumber = true
-                   }
+                display.text = digit
+                userIsInTheMiddleOfTypingANumber = true
+                history.text = history.text!.rangeOfString("=") != nil ? dropLast( history.text!) :  history.text
+        }
     }
     
     @IBAction func decimalPoint(sender: UIButton) {
-        if !userAlreadyEnteredADecimalPoint {
+        let noPointOnDisplay = display.text?.rangeOfString(decimalSeparator) == nil
+        if (noPointOnDisplay) || !noPointOnDisplay && !userIsInTheMiddleOfTypingANumber {
             appendDigit(sender)
-            userAlreadyEnteredADecimalPoint = true
         }
     }
     
@@ -59,40 +62,25 @@ class ViewController: UIViewController
     }
     
     @IBAction func enter() {
-         userIsInTheMiddleOfTypingANumber = false
-         userAlreadyEnteredADecimalPoint = false
-        if let result = brain.pushOperand(displayValue!) {
-            displayValue = result
-        } else {
-            // error?
-            displayValue = nil  // задание 2
+        userIsInTheMiddleOfTypingANumber = false
+        if let value = displayValue {
+               displayValue = brain.pushOperand(value)
+            } else {
+               displayValue = nil
         }
-    }
+     }
     
     @IBAction func clearAll(sender: AnyObject) {
-        brain = CalculatorBrain()
-        displayValue = nil
-        history.text = " "
-
+          brain = CalculatorBrain()
+          displayValue = nil
     }
  
     @IBAction func backSpace(sender: AnyObject) {
         if userIsInTheMiddleOfTypingANumber {
             if countElements(display.text!) > 1 {
                 display.text = dropLast(display.text!)
-//  смотрим не исчезла ли точка
-                if (display.text!.rangeOfString(".") != nil){
-                    userAlreadyEnteredADecimalPoint = false
-                }
-//   если осталось "-0" то превращаем в 0
-                if (countElements(display.text!) == 2) && (display.text?.rangeOfString("-") != nil) {
-                    display.text = "0"
-                }
-
-
             } else {
-                display.text = "0"
-                userIsInTheMiddleOfTypingANumber = false
+                displayValue = nil
             }
         }
     }
@@ -123,10 +111,15 @@ class ViewController: UIViewController
                 display.text = " "
             }
             userIsInTheMiddleOfTypingANumber = false
-            history.text = brain.displayStack()
+            history.text = brain.displayStack() ?? " "
             
         }
     }
-
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tochka.setTitle(decimalSeparator, forState: UIControlState.Normal)
+        display.text = " "
+        displayValue = nil
+    }
 }
 

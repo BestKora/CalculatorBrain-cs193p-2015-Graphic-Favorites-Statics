@@ -79,12 +79,9 @@
 		E48677C11A83DC010087A9CA /* CalculatorBrain */ = {
 			isa = PBXGroup;
 			children = (
-				E48677C41A83DC010087A9CA /* AppDelegate.swift */,
 				E48677C61A83DC010087A9CA /* ViewController.swift */,
 				E48677E41A83DC7D0087A9CA /* CalculatorBrain.swift */,
 				E48677C81A83DC010087A9CA /* Main.storyboard */,
-				E48677CB1A83DC010087A9CA /* Images.xcassets */,
-				E48677CD1A83DC010087A9CA /* LaunchScreen.xib */,
 				E48677C21A83DC010087A9CA /* Supporting Files */,
 			);
 			path = CalculatorBrain;
@@ -93,6 +90,9 @@
 		E48677C21A83DC010087A9CA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E48677CD1A83DC010087A9CA /* LaunchScreen.xib */,
+				E48677C41A83DC010087A9CA /* AppDelegate.swift */,
+				E48677CB1A83DC010087A9CA /* Images.xcassets */,
 				E48677C31A83DC010087A9CA /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -411,6 +411,7 @@
 				E48677E01A83DC010087A9CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E48677E11A83DC010087A9CA /* Build configuration list for PBXNativeTarget "CalculatorBrainTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +420,7 @@
 				E48677E31A83DC010087A9CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
