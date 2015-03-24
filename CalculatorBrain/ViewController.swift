@@ -11,16 +11,22 @@ import UIKit
 class ViewController: UIViewController
 {
     @IBOutlet weak var display: UILabel!
-    
     @IBOutlet weak var history: UILabel!
-    
-    @IBOutlet weak var tochka: UIButton!
-    
-    let decimalSeparator = NSNumberFormatter().decimalSeparator ?? "."
+    @IBOutlet weak var tochka: UIButton! {
+        didSet {
+            tochka.setTitle(decimalSeparator, forState: UIControlState.Normal)
+        }
+    }
+
+    let decimalSeparator =  NSNumberFormatter().decimalSeparator ?? "."
     var userIsInTheMiddleOfTypingANumber = false
-    
     var brain = CalculatorBrain()
-    
+
+    private struct Constants {
+        static let MaxHistoryTextLength: Int = 38
+        
+    }
+   
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         //        println("digit = \(digit)");
@@ -51,12 +57,12 @@ class ViewController: UIViewController
         }
         if let operation = sender.currentTitle {
             if let result = brain.performOperation(operation) {
-                displayValue = result
+                 displayValue = result
                  history.text =  history.text! + " ="
             } else {
                 // error?
                 displayValue = nil  // задание 2
-                history.text =  history.text! + " ERROR"
+                history.text =  history.text! + " ERROR ="
             }
         }
     }
@@ -100,26 +106,44 @@ class ViewController: UIViewController
     var displayValue: Double? {
         get {
             if let displayText = display.text {
-               return NSNumberFormatter().numberFromString(displayText)?.doubleValue
+               return numberFormatter().numberFromString(displayText)?.doubleValue
             }
             return nil
         }
         set {
             if (newValue != nil) {
-                display.text = "\(newValue!)"
+               display.text = numberFormatter().stringFromNumber(newValue!)
             } else {
                 display.text = " "
             }
             userIsInTheMiddleOfTypingANumber = false
             history.text = brain.displayStack() ?? " "
-            
+//------------------------------------history.text бегущей строкой-----
+             history.text = ticker(history.text!)
+
         }
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tochka.setTitle(decimalSeparator, forState: UIControlState.Normal)
-        display.text = " "
-        displayValue = nil
+    
+    func numberFormatter () -> NSNumberFormatter{
+        let numberFormatterLoc = NSNumberFormatter()
+        numberFormatterLoc.numberStyle = .DecimalStyle
+        numberFormatterLoc.maximumFractionDigits = 10
+        numberFormatterLoc.notANumberSymbol = "Error"
+        numberFormatterLoc.groupingSeparator = " "
+        return numberFormatterLoc
+    }
+    
+    func ticker (text: String ) -> String {
+        var textTicker = text
+        let countText = countElements(textTicker)
+        if countText > Constants.MaxHistoryTextLength {
+            textTicker = textTicker[advance(textTicker.startIndex,countText - Constants.MaxHistoryTextLength )..<textTicker.endIndex]
+            let myStringArr = textTicker.componentsSeparatedByString(" ")
+            var myStringArr1 = myStringArr[1..<myStringArr.count]
+            if !myStringArr1.isEmpty { textTicker =  " ".join(myStringArr1)}
+            textTicker =  "... " + textTicker
+        }
+        return textTicker
     }
 }
 
