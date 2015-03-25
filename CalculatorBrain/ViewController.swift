@@ -33,12 +33,15 @@ class ViewController: UIViewController
         //        println("digit = \(digit)");
         
         if userIsInTheMiddleOfTypingANumber {
+            
              //----- Не пускаем избыточную точку ---------------
             if (digit == decimalSeparator) && (display.text?.rangeOfString(decimalSeparator) != nil) { return }
             //----- Уничтожаем лидирующие нули -----------------
             if (digit == "0") && ((display.text == "0") || (display.text == "-0")){ return }
-            if (digit != decimalSeparator) && ((display.text == "0")  || (display.text == "-0")) { display.text = digit ; return }
+            if (digit != decimalSeparator) && ((display.text == "0") || (display.text == "-0"))
+                                                                              { display.text = digit ; return }
             //--------------------------------------------------
+            
             display.text = display.text! + digit
         } else {
                 display.text = digit
