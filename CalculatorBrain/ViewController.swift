@@ -19,6 +19,7 @@ class ViewController: UIViewController
     }
 
     let decimalSeparator =  NSNumberFormatter().decimalSeparator ?? "."
+    
     var userIsInTheMiddleOfTypingANumber = false
     var brain = CalculatorBrain()
 
@@ -32,7 +33,9 @@ class ViewController: UIViewController
         //        println("digit = \(digit)");
         
         if userIsInTheMiddleOfTypingANumber {
-            //----- Уничтожаем лидирующие нули ---------------
+             //----- Не пускаем избыточную точку ---------------
+            if (digit == decimalSeparator) && (display.text?.rangeOfString(decimalSeparator) != nil) { return }
+            //----- Уничтожаем лидирующие нули -----------------
             if (digit == "0") && ((display.text == "0") || (display.text == "-0")){ return }
             if (digit != decimalSeparator) && ((display.text == "0")  || (display.text == "-0")) { display.text = digit ; return }
             //--------------------------------------------------
@@ -44,12 +47,6 @@ class ViewController: UIViewController
         }
     }
     
-    @IBAction func decimalPoint(sender: UIButton) {
-        let noPointOnDisplay = display.text?.rangeOfString(decimalSeparator) == nil
-        if (noPointOnDisplay) || !noPointOnDisplay && !userIsInTheMiddleOfTypingANumber {
-            appendDigit(sender)
-        }
-    }
     
     @IBAction func operate(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber {
