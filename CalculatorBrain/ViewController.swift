@@ -12,7 +12,7 @@ class ViewController: UIViewController
 {
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var history: UILabel!
-    @IBOutlet weak var tochka: UIButton! {
+    @IBOutlet weak var tochka: UIButton!{
         didSet {
             tochka.setTitle(decimalSeparator, forState: UIControlState.Normal)
         }
@@ -25,7 +25,6 @@ class ViewController: UIViewController
 
     private struct Constants {
         static let MaxHistoryTextLength: Int = 38
-        
     }
    
     @IBAction func appendDigit(sender: UIButton) {
@@ -39,14 +38,15 @@ class ViewController: UIViewController
             //----- Уничтожаем лидирующие нули -----------------
             if (digit == "0") && ((display.text == "0") || (display.text == "-0")){ return }
             if (digit != decimalSeparator) && ((display.text == "0") || (display.text == "-0"))
-                                                                              { display.text = digit ; return }
+                                                              { display.text = digit ; return }
             //--------------------------------------------------
             
             display.text = display.text! + digit
         } else {
                 display.text = digit
                 userIsInTheMiddleOfTypingANumber = true
-                history.text = history.text!.rangeOfString("=") != nil ? dropLast( history.text!) :  history.text
+                history.text =
+                  history.text!.rangeOfString("=") != nil ? dropLast( history.text!) :history.text
         }
     }
     
@@ -61,7 +61,7 @@ class ViewController: UIViewController
                  history.text =  history.text! + " ="
             } else {
                 // error?
-                displayValue = nil  // задание 2
+                displayValue = nil
                 history.text =  history.text! + " ERROR ="
             }
         }
@@ -106,23 +106,26 @@ class ViewController: UIViewController
     var displayValue: Double? {
         get {
             if let displayText = display.text {
-               return numberFormatter().numberFromString(displayText)?.doubleValue
+                return numberFormatter().numberFromString(displayText)?.doubleValue
             }
             return nil
         }
         set {
             if (newValue != nil) {
-               display.text = numberFormatter().stringFromNumber(newValue!)
+                display.text = numberFormatter().stringFromNumber(newValue!)
             } else {
                 display.text = " "
             }
             userIsInTheMiddleOfTypingANumber = false
             history.text = brain.displayStack() ?? " "
-//------------------------------------history.text бегущей строкой-----
-             history.text = ticker(history.text!)
-
+       
+//---history.text бегущей строкой-----
+            
+            history.text = ticker(history.text!)
+        
         }
     }
+
     
     func numberFormatter () -> NSNumberFormatter{
         let numberFormatterLoc = NSNumberFormatter()
@@ -137,7 +140,8 @@ class ViewController: UIViewController
         var textTicker = text
         let countText = countElements(textTicker)
         if countText > Constants.MaxHistoryTextLength {
-            textTicker = textTicker[advance(textTicker.startIndex,countText - Constants.MaxHistoryTextLength )..<textTicker.endIndex]
+            textTicker = textTicker[advance(textTicker.startIndex,
+                           countText - Constants.MaxHistoryTextLength )..<textTicker.endIndex]
             let myStringArr = textTicker.componentsSeparatedByString(" ")
             var myStringArr1 = myStringArr[1..<myStringArr.count]
             if !myStringArr1.isEmpty { textTicker =  " ".join(myStringArr1)}

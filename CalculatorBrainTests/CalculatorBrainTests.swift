@@ -9,7 +9,6 @@
 import UIKit
 import XCTest
 
-
 class CalculatorBrainTests: XCTestCase {
      private var brain = CalculatorBrain()
     
@@ -19,5 +18,12 @@ class CalculatorBrainTests: XCTestCase {
         XCTAssertTrue(brain.performOperation("cos")! - -0.839 < 0.1)
         XCTAssertEqual(brain.displayStack()!, "10.0 cos")
      }
-    
+    func testPushOperandVariable() {
+        XCTAssertNil(brain.pushOperand("x"))
+        brain.variableValues = ["x": 5.2]
+        XCTAssertEqual(5.2, brain.pushOperand("x")!)
+        XCTAssertEqual(10.4, brain.performOperation("+")!)
+    }
+
 }
+
