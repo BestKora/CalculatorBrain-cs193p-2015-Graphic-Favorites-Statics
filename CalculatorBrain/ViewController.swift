@@ -40,13 +40,11 @@ class ViewController: UIViewController
             if (digit != decimalSeparator) && ((display.text == "0") || (display.text == "-0"))
                                                               { display.text = digit ; return }
             //--------------------------------------------------
-            
             display.text = display.text! + digit
         } else {
                 display.text = digit
                 userIsInTheMiddleOfTypingANumber = true
-                history.text =
-                  history.text!.rangeOfString("=") != nil ? dropLast( history.text!) :history.text
+                  history.text = brain.description != "?" ? brain.description : " "
         }
     }
     
@@ -58,13 +56,11 @@ class ViewController: UIViewController
         if let operation = sender.currentTitle {
             if let result = brain.performOperation(operation) {
                  displayValue = result
-                 history.text =  history.text! + " ="
             } else {
                 // error?
                 displayValue = nil
-                history.text =  history.text! + " ERROR ="
             }
-        }
+             history.text = history.text!         }
     }
     
     @IBAction func enter() {
@@ -117,16 +113,16 @@ class ViewController: UIViewController
                 display.text = " "
             }
             userIsInTheMiddleOfTypingANumber = false
-            history.text = brain.displayStack() ?? " "
+//          history.text = brain.displayStack()
+//          history.text = brain.descriotion
+            history.text = brain.description1 + " ="
        
 //---history.text бегущей строкой-----
             
             history.text = ticker(history.text!)
-        
         }
     }
 
-    
     func numberFormatter () -> NSNumberFormatter{
         let numberFormatterLoc = NSNumberFormatter()
         numberFormatterLoc.numberStyle = .DecimalStyle

@@ -81,8 +81,74 @@ class CalculatorBrain
             }
         }
     }
+
+    var description1: String {
+        get {
+            let (result, remainder) = descParts(opStack)
+//            println("\(opStack) = \(result) c остатком \(remainder)")
+            return result ?? ""
+        }
+    }
+
+    private func descParts(ops: [Op]) -> (result: String?, remainingOps: [Op]) {
+        let (result, reminder) = description(ops)
+        if !reminder.isEmpty {
+            let (current, reminderCurrent) = descParts(reminder)
+            return ("\(current!), \(result!)",reminderCurrent)
+        }
+        return (result,reminder)
+    }
     
-    private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op]) {
+    var description: String {
+        get {
+            var (result, remainder) = ("", opStack)
+            var current: String?
+            do {
+                (current, remainder) = description(remainder)
+                result = result == "" ? current! : "\(current!), \(result)"
+            } while remainder.count > 0
+            return result
+        }
+    }
+    
+    private func description(ops: [Op]) -> (result: String?, remainingOps: [Op]) {
+        if !ops.isEmpty {
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+            switch op {
+                
+            case .Operand(let operand):
+                return ( numberFormatter().stringFromNumber(operand), remainingOps)
+                
+            case .ConstantOperation(let symbol, _):
+                return (symbol, remainingOps);
+                
+            case .UnaryOperation(let symbol, _):
+                let operandEvaluation = description(remainingOps)
+                if let operand = operandEvaluation.result {
+                    return ("\(symbol)(\(operand))", operandEvaluation.remainingOps)
+                }
+                
+            case .BinaryOperation(let symbol, _):
+                let op1Evaluation = description(remainingOps)
+                if var operand1 = op1Evaluation.result {
+                    if remainingOps.count - op1Evaluation.remainingOps.count > 2 {
+                        operand1 = "(\(operand1))"
+                    }
+                    let op2Evaluation = description(op1Evaluation.remainingOps)
+                    if let operand2 = op2Evaluation.result {
+                        return ("\(operand2) \(symbol) \(operand1)", op2Evaluation.remainingOps)
+                    }
+                }
+                
+            case .Variable(let symbol):
+                return (symbol, remainingOps)
+            }
+        }
+        return ("?", ops)
+    }
+    
+   private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op]) {
         if !ops.isEmpty {
             var remainingOps = ops
             let op = remainingOps.removeLast()
@@ -114,15 +180,10 @@ class CalculatorBrain
         return (nil, ops)
     }
     
-    func displayStack() -> String? {
-        return opStack.isEmpty ? nil : " ".join(opStack.map{ $0.description })
-    }
-
-    
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
         //let (result, _) = evaluate(opStack)
-        println("\(opStack) = \(result) with \(remainder) left over")
+//        println("\(opStack) = \(result) с остатком \(remainder)")
         return result
     }
     
@@ -142,4 +203,18 @@ class CalculatorBrain
         }
         return evaluate()
     }
+    
+    func displayStack() -> String {
+        return opStack.isEmpty ? "" : " ".join(opStack.map{ $0.description })
+    }
+   
+    func numberFormatter () -> NSNumberFormatter{
+        let numberFormatterLoc = NSNumberFormatter()
+        numberFormatterLoc.numberStyle = .DecimalStyle
+        numberFormatterLoc.maximumFractionDigits = 10
+        numberFormatterLoc.notANumberSymbol = "Error"
+        numberFormatterLoc.groupingSeparator = " "
+        return numberFormatterLoc
+    }
+
 }
