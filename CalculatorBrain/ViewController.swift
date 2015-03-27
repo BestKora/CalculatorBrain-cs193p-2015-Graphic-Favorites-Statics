@@ -44,7 +44,7 @@ class ViewController: UIViewController
         } else {
                 display.text = digit
                 userIsInTheMiddleOfTypingANumber = true
-                  history.text = brain.description != "?" ? brain.description : " "
+                history.text = brain.description != "?" ? brain.description : " "
         }
     }
     
