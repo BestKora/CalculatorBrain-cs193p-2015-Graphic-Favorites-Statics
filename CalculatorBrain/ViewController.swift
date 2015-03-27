@@ -113,8 +113,8 @@ class ViewController: UIViewController
                 display.text = " "
             }
             userIsInTheMiddleOfTypingANumber = false
-//          history.text = brain.displayStack()
-//          history.text = brain.descriotion
+//          history.text = brain.displayStack() + " ="
+//          history.text = brain.description + " ="
             history.text = brain.description1 + " ="
        
 //---history.text бегущей строкой-----
