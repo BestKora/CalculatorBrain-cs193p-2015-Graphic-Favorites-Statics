@@ -72,8 +72,25 @@ class ViewController: UIViewController
         }
      }
     
+    @IBAction func setVariable(sender: UIButton) {
+        userIsInTheMiddleOfTypingANumber = false
+        
+        let symbol = dropFirst(sender.currentTitle!)
+        if let value = displayValue {
+            brain.setVariable(symbol, value: value)
+            displayValue = brain.evaluate()
+        }
+    }
+    
+    @IBAction func pushVariable(sender: UIButton) {
+        if userIsInTheMiddleOfTypingANumber {
+            enter()
+        }
+        displayValue = brain.pushOperand(sender.currentTitle!)
+    }
+    
     @IBAction func clearAll(sender: AnyObject) {
-          brain = CalculatorBrain()
+          brain.clearAll()
           displayValue = nil
     }
  
@@ -115,6 +132,7 @@ class ViewController: UIViewController
             userIsInTheMiddleOfTypingANumber = false
 //          history.text = brain.displayStack() + " ="
 //          history.text = brain.description + " ="
+            
             history.text = brain.description1 + " ="
        
 //---history.text бегущей строкой-----

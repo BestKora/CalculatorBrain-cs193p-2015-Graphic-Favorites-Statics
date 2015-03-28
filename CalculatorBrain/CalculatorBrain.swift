@@ -39,11 +39,30 @@ class CalculatorBrain
         }
     }
 
-    private var opStack = [Op]()
-    
+    private var opStack = [Op]()    
     private var knownOps = [String:Op]()
+    private var variableValues = [String: Double]()
+   
+    func getVariable(symbol: String) -> Double? {
+        return variableValues[symbol]
+    }
     
-    var variableValues = [String: Double]()
+    func setVariable(symbol: String, value: Double) {
+        variableValues[symbol] = value
+    }
+    
+    func clearVariables() {
+        variableValues.removeAll()
+    }
+    
+    func clearStack() {
+        opStack.removeAll()
+    }
+    
+    func clearAll() {
+        clearVariables()
+        clearStack()
+    }
     
     init() {
         func learnOp (op: Op) {
@@ -60,6 +79,7 @@ class CalculatorBrain
         learnOp(Op.UnaryOperation("±", { -$0 }))
     }
     
+
     typealias PropertyList = AnyObject
     
     var program:PropertyList { // guaranteed to be a Property List
