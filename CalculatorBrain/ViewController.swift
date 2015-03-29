@@ -94,6 +94,8 @@ class ViewController: UIViewController
           displayValue = nil
     }
  
+
+    
     @IBAction func backSpace(sender: AnyObject) {
         if userIsInTheMiddleOfTypingANumber {
             if countElements(display.text!) > 1 {
@@ -130,8 +132,9 @@ class ViewController: UIViewController
                 display.text = " "
             }
             userIsInTheMiddleOfTypingANumber = false
-//          history.text = brain.displayStack() + " ="
-//          history.text = brain.description + " ="
+            
+         // history.text = brain.displayStack() + " ="
+         // history.text = brain.description + " ="
             
             history.text = brain.description1 + " ="
        
