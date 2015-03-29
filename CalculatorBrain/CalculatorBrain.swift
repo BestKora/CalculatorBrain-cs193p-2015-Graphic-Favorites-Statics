@@ -182,7 +182,8 @@ class CalculatorBrain
                 let (operand2, remainingOperand2) =
                                description(remainingOps , opPrev: op)
                 var descriptionBinary = "\(operand2) \(symbol) \(operand1)"
-                if opPrev.precedence > precedenceCurrent || (opPrev.precedence == precedenceCurrent && !opPrev.commutative){
+                if opPrev.precedence > precedenceCurrent 
+                        || (opPrev.precedence == precedenceCurrent && !opPrev.commutative){
                     descriptionBinary = "(\(descriptionBinary))"
                 }
                 return (descriptionBinary, remainingOperand2)
@@ -194,40 +195,35 @@ class CalculatorBrain
         return ("?", ops)
     }
 */
-    private func description(ops: [Op])
-               -> (result: String, remainingOps: [Op], precedence: Int) {
+    private func description(ops: [Op]) -> (result: String, remainingOps: [Op], precedence: Int) {
         if !ops.isEmpty {
             var remainingOps = ops
             let op = remainingOps.removeLast()
             switch op {
                 
             case .Operand(let operand):
-                return (numberFormatter().stringFromNumber(operand) ?? "",
-                                                 remainingOps, op.precedence)
+                return (numberFormatter().stringFromNumber(operand) ?? "", remainingOps, op.precedence)
                 
             case .ConstantOperation(let symbol, _):
                 return (symbol, remainingOps, op.precedence)
                 
             case .UnaryOperation(let symbol, _):
-                let  (operand, remainingOps, precedenceOperand) =
-                                                    description(remainingOps)
+                let  (operand, remainingOps, precedenceOperand) = description(remainingOps)
                 return ("\(symbol)(\(operand))", remainingOps, op.precedence)
                 
             case .BinaryOperation(let symbol, _, _, _):
-                var (operand1, remainingOps, precedenceOperand1) =
-                                                    description(remainingOps)
+                var (operand1, remainingOps, precedenceOperand1) = description(remainingOps)
                 if op.precedence > precedenceOperand1
                     || (op.precedence == precedenceOperand1 && !op.commutative ){
                         operand1 = "(\(operand1))"
                 }
-                var (operand2, remainingOpsOperand2, precedenceOperand2) =
-                                                    description(remainingOps)
+                var (operand2, remainingOpsOperand2, precedenceOperand2) = description(remainingOps)
                 if op.precedence > precedenceOperand2
-                    || (op.precedence == precedenceOperand2 && !op.commutative ){
+ //                   || (op.precedence == precedenceOperand2 && !op.commutative )
+                {
                         operand2 = "(\(operand2))"
                 }
-                return ("\(operand2) \(symbol) \(operand1)",
-                                            remainingOpsOperand2, op.precedence)
+                return ("\(operand2) \(symbol) \(operand1)", remainingOpsOperand2, op.precedence)
                 
             case .Variable(let symbol):
                 return (symbol, remainingOps, op.precedence)
