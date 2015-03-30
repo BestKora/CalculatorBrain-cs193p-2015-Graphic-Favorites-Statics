@@ -148,7 +148,7 @@ class CalculatorBrainTests: XCTestCase {
         XCTAssertTrue(brain.performOperation("÷")! - 0.53333 < 0.1)
         XCTAssertEqual(brain.description, "(3 + 5) ÷ (7 + 8)")
         
-        // 3 - 5 - (7 - 8)
+        // 3 - 5 - (7 - 8) commutative test
         brain = CalculatorBrain()
         XCTAssertEqual(brain.pushOperand(3)!, 3)
         XCTAssertEqual(brain.pushOperand(5)!, 5)
@@ -174,4 +174,5 @@ class CalculatorBrainTests: XCTestCase {
 
     }
 }
+
 

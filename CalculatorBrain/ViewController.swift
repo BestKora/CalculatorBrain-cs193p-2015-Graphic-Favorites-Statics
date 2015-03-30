@@ -93,8 +93,6 @@ class ViewController: UIViewController
           brain.clearAll()
           displayValue = nil
     }
- 
-
     
     @IBAction func backSpace(sender: AnyObject) {
         if userIsInTheMiddleOfTypingANumber {
@@ -103,6 +101,8 @@ class ViewController: UIViewController
             } else {
                 displayValue = nil
             }
+        } else {
+            displayValue = brain.popStack()
         }
     }
     

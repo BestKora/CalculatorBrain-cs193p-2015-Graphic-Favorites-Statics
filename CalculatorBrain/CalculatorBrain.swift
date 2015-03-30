@@ -214,12 +214,13 @@ class CalculatorBrain
             case .BinaryOperation(let symbol, _, _, _):
                 var (operand1, remainingOps, precedenceOperand1) = description(remainingOps)
                 if op.precedence > precedenceOperand1
-                    || (op.precedence == precedenceOperand1 && !op.commutative ){
+                    || (op.precedence == precedenceOperand1 && !op.commutative )
+                {
                         operand1 = "(\(operand1))"
                 }
                 var (operand2, remainingOpsOperand2, precedenceOperand2) = description(remainingOps)
                 if op.precedence > precedenceOperand2
- //                   || (op.precedence == precedenceOperand2 && !op.commutative )
+           //         || (op.precedence == precedenceOperand2 && !op.commutative )
                 {
                         operand2 = "(\(operand2))"
                 }
@@ -287,6 +288,14 @@ class CalculatorBrain
         }
         return evaluate()
     }
+    
+    func popStack() -> Double? {
+        if !opStack.isEmpty {
+            opStack.removeLast()
+        }
+        return evaluate()
+    }
+
     
     func displayStack() -> String {
         return opStack.isEmpty ? "" : " ".join(opStack.map{ $0.description })
