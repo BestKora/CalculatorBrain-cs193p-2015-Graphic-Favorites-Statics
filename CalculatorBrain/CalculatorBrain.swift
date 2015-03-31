@@ -12,12 +12,29 @@ import Foundation
 
 class CalculatorBrain
 {
+ 
+    // enum Resul - либо для значения стэка, либо для сообщения об ошибке
+    // public, так как используется ViewController для получения оценки стэка
+    enum Result: Printable {
+        case Value(Double)
+        case Error(String)
+        
+        var description: String {
+            switch self {
+            case .Value(let value):               
+                return  CalculatorBrain.numberFormatter().stringFromNumber(value) ?? ""
+            case .Error(let errorMessage):
+                return errorMessage
+            }
+        }
+    }
+    // enum Op - для различных операций
     private enum Op: Printable
     {
         case Operand(Double)
         case ConstantOperation(String, () -> Double)
-        case UnaryOperation(String, Double -> Double)
-        case BinaryOperation(String,  Int, Bool, (Double, Double) -> Double)
+        case UnaryOperation(String, Double -> Double, (Double -> String?)?)
+        case BinaryOperation(String,  Int, Bool, (Double, Double) -> Double, ((Double, Double) -> String?)?)
         case Variable(String)
         
         var description: String {
@@ -25,9 +42,9 @@ class CalculatorBrain
                 switch self {
                 case .Operand(let operand):
                     return "\(operand)"
-                case .UnaryOperation(let symbol, _):
+                case .UnaryOperation(let symbol, _, _):
                     return symbol
-                case .BinaryOperation(let symbol, _, _, _):
+                case .BinaryOperation(let symbol, _, _, _, _):
                     return symbol
                 case .ConstantOperation(let symbol, _):
                     return symbol
@@ -40,7 +57,7 @@ class CalculatorBrain
         var precedence: Int {
             get {
                 switch self {
-                case .BinaryOperation(_, let precedence, _, _ ):
+                case .BinaryOperation(_, let precedence, _, _, _):
                     return precedence
                 default:
                     return  Int.max
@@ -50,7 +67,7 @@ class CalculatorBrain
         var commutative: Bool {
             get {
                 switch self {
-                case .BinaryOperation(_, _ , let commutative, _):
+                case .BinaryOperation(_, _ , let commutative, _, _):
                     return commutative
                 default:
                     return  true
@@ -88,15 +105,17 @@ class CalculatorBrain
         func learnOp (op: Op) {
             knownOps[op.description] = op
         }
-        learnOp(Op.BinaryOperation("×", 2, true, * ))
-        learnOp(Op.BinaryOperation("÷", 2, false, { $1 / $0 }))
-        learnOp(Op.BinaryOperation("+", 1, true,  +))
-        learnOp(Op.BinaryOperation("−", 1, false, { $1 - $0} ))
+        learnOp(Op.BinaryOperation("×", 2, true, *, nil ))
+        learnOp(Op.BinaryOperation("÷", 2, false, { $1 / $0 },
+          { divisor, _ in return divisor == 0.0 ? "Деление на ноль" : nil }))
+        learnOp(Op.BinaryOperation("+", 1, true, +, nil))
+        learnOp(Op.BinaryOperation("−", 1, false, { $1 - $0}, nil))
         
-        learnOp(Op.UnaryOperation("√", sqrt))
-        learnOp(Op.UnaryOperation("sin", sin))
-        learnOp(Op.UnaryOperation("cos", cos))
-        learnOp(Op.UnaryOperation("±", { -$0 }))
+        learnOp(Op.UnaryOperation("√", sqrt,
+                                   { $0 < 0 ? "√ отриц. числа" : nil }))
+        learnOp(Op.UnaryOperation("sin", sin, nil))
+        learnOp(Op.UnaryOperation("cos", cos, nil))
+        learnOp(Op.UnaryOperation("±", { -$0 }, nil))
         
         learnOp(Op.ConstantOperation("π", { M_PI }))
     }
@@ -151,50 +170,7 @@ class CalculatorBrain
             return result
         }
     }
-/*
-// Для использования этого метода необходимо в  var precedence: Int у
-// установить вместо return  Int.max другое возврат return  0
-// Убрать в descParts и var description: String лишний параметр в кортеже (current, remainder, _)
-// Параметры при вызове description(ops) в  descParts и description(remainder) в var description: String
-// можно не добавлять, так как будет использоваться значение по умолчанию opPrev: Op = .Variable ("x"), которое
-// имеет precedence = 0 и commutative = true
-    
-    private func description(ops: [Op], opPrev: Op = .Variable ("x") )
-                                      -> (result: String, remainingOps: [Op]) {
-        if !ops.isEmpty {
-            var remainingOps = ops
-            let op = remainingOps.removeLast()
-            switch op {
-                
-            case .Operand(let operand):
-                return (numberFormatter().stringFromNumber(operand) ?? "",remainingOps)
-                
-            case .ConstantOperation(let symbol, _):
-                return (symbol, remainingOps);
-                
-            case .UnaryOperation(let symbol, _):
-                let (operand, remainingOps) = description(remainingOps, opPrev: op)
-                return ("\(symbol)(\(operand))", remainingOps)
-                
-            case .BinaryOperation(let symbol, let precedenceCurrent, _, _):
-                let (operand1, remainingOps) =
-                               description(remainingOps, opPrev: op)
-                let (operand2, remainingOperand2) =
-                               description(remainingOps , opPrev: op)
-                var descriptionBinary = "\(operand2) \(symbol) \(operand1)"
-                if opPrev.precedence > precedenceCurrent 
-                        || (opPrev.precedence == precedenceCurrent && !opPrev.commutative){
-                    descriptionBinary = "(\(descriptionBinary))"
-                }
-                return (descriptionBinary, remainingOperand2)
-                
-            case .Variable(let symbol):
-                return (symbol, remainingOps)
-            }
-        }
-        return ("?", ops)
-    }
-*/
+
     private func description(ops: [Op]) -> (result: String, remainingOps: [Op], precedence: Int) {
         if !ops.isEmpty {
             var remainingOps = ops
@@ -202,16 +178,16 @@ class CalculatorBrain
             switch op {
                 
             case .Operand(let operand):
-                return (numberFormatter().stringFromNumber(operand) ?? "", remainingOps, op.precedence)
+                return (CalculatorBrain.numberFormatter().stringFromNumber(operand) ?? "", remainingOps, op.precedence)
                 
             case .ConstantOperation(let symbol, _):
                 return (symbol, remainingOps, op.precedence)
                 
-            case .UnaryOperation(let symbol, _):
+            case .UnaryOperation(let symbol, _, _):
                 let  (operand, remainingOps, precedenceOperand) = description(remainingOps)
                 return ("\(symbol)(\(operand))", remainingOps, op.precedence)
                 
-            case .BinaryOperation(let symbol, _, _, _):
+            case .BinaryOperation(let symbol, _, _, _, _):
                 var (operand1, remainingOps, precedenceOperand1) = description(remainingOps)
                 if op.precedence > precedenceOperand1
                     || (op.precedence == precedenceOperand1 && !op.commutative )
@@ -244,12 +220,12 @@ class CalculatorBrain
             case .ConstantOperation(_, let operation):
                 return (operation(), remainingOps)
                 
-            case .UnaryOperation(_, let operation):
+            case .UnaryOperation(_, let operation, let errorTest):
                 let operandEvaluation = evaluate(remainingOps)
                 if let operand = operandEvaluation.result {
                     return (operation(operand), operandEvaluation.remainingOps)
                 }
-            case .BinaryOperation(_, _, _, let operation):
+            case .BinaryOperation(_, _, _, let operation, let errorTest):
                 let op1Evaluation = evaluate(remainingOps)
                 if let operand1 = op1Evaluation.result {
                     let op2Evaluation = evaluate(op1Evaluation.remainingOps)
@@ -259,17 +235,77 @@ class CalculatorBrain
                 }
             case .Variable(let symbol):
                 return (variableValues[symbol], remainingOps)
-
             }
         }
         return (nil, ops)
     }
     
+    // recursive helper function for public evaluateAndReportErrors method below
+    private func evaluateResult(ops: [Op]) -> (result: Result, remainingOps: [Op]) {
+        
+        if !ops.isEmpty {
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+            switch op {
+            case .Operand(let operand):
+                return (.Value(operand), remainingOps)
+                
+            case .Variable(let variable):
+                if let varValue = variableValues[variable] {
+                    return (.Value(varValue), remainingOps)
+                }
+                return (.Error("\(variable) не установлена"), remainingOps)
+                
+            case .ConstantOperation(_, let operation):
+                return (Result.Value(operation()), remainingOps)
+                
+            case .UnaryOperation(_, let operation, let errorTest):
+                let operandEvaluation = evaluateResult(remainingOps)
+                switch operandEvaluation.result {
+                case .Value(let operand):
+                    if let errMessage = errorTest?(operand) {
+                        return (.Error(errMessage), remainingOps)
+                    }
+                    return (.Value(operation(operand)), operandEvaluation.remainingOps)
+                case .Error(let errMessage):
+                    return (.Error(errMessage), remainingOps)
+                }
+            case .BinaryOperation(_, _, _, let operation, let errorTest):
+                let op1Evaluation = evaluateResult(remainingOps)
+                switch op1Evaluation.result {
+                case .Value(let operand1):
+                    let op2Evaluation = evaluateResult(op1Evaluation.remainingOps)
+                    switch op2Evaluation.result {
+                    case .Value(let operand2):
+                        if let errMessage = errorTest?(operand1, operand2) {
+                            return (.Error(errMessage), op1Evaluation.remainingOps)
+                        }
+                        return (.Value(operation(operand1, operand2)), op2Evaluation.remainingOps)
+                    case .Error(let errMessage):
+                        return (.Error(errMessage), op1Evaluation.remainingOps)
+                    }
+                case .Error(let errMessage):
+                    return (.Error(errMessage), remainingOps)
+                }
+            }
+        }
+        return (.Error("Мало операндов"), ops)
+    }
+
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
         //let (result, _) = evaluate(opStack)
 //        println("\(opStack) = \(result) с остатком \(remainder)")
         return result
+    }
+    
+
+    // public method returning the evaluation of the opStack using the Type Result
+    func evaluateAndReportErrors() -> Result {
+        if !opStack.isEmpty {
+            return evaluateResult(opStack).result
+        }
+        return .Value(0)
     }
     
     func pushOperand(operand: Double) -> Double? {
@@ -300,8 +336,9 @@ class CalculatorBrain
     func displayStack() -> String {
         return opStack.isEmpty ? "" : " ".join(opStack.map{ $0.description })
     }
-   
-    func numberFormatter () -> NSNumberFormatter{
+    
+    
+   class func numberFormatter () -> NSNumberFormatter {
         let numberFormatterLoc = NSNumberFormatter()
         numberFormatterLoc.numberStyle = .DecimalStyle
         numberFormatterLoc.maximumFractionDigits = 10
@@ -309,5 +346,6 @@ class CalculatorBrain
         numberFormatterLoc.groupingSeparator = " "
         return numberFormatterLoc
     }
+
 
 }

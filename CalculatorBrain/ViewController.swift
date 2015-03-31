@@ -17,16 +17,44 @@ class ViewController: UIViewController
             tochka.setTitle(decimalSeparator, forState: UIControlState.Normal)
         }
     }
-
+ 
     let decimalSeparator =  NSNumberFormatter().decimalSeparator ?? "."
     
     var userIsInTheMiddleOfTypingANumber = false
     var brain = CalculatorBrain()
 
     private struct Constants {
-        static let MaxHistoryTextLength: Int = 38
+        static let MaxHistoryTextLength: Int = 35
     }
    
+    // property storing the evaluation results from the brain model
+    // its Result type defined by enum in the brain model
+    var displayResult: CalculatorBrain.Result = .Value(0.0) {
+        // also updates the two IBOutlet text fields
+        didSet {
+            // using the description property of the
+            // Result enum adhering to the printable protocol
+            display.text = displayResult.description
+            userIsInTheMiddleOfTypingANumber = false
+            // history.text = brain.displayStack() + " ="
+            // history.text = brain.description + " ="
+
+            history.text = brain.description1 + "="
+            //---history.text бегущей строкой-----
+//            history.text = ticker(history.text!)
+        }
+    }
+    
+    // computed read-only property mirroring UILabel display.text
+    var displayValue: Double? {
+        get {
+            if let displayText = display.text {
+                return CalculatorBrain.numberFormatter().numberFromString(displayText)?.doubleValue
+            }
+            return nil
+        }
+    }
+
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         //        println("digit = \(digit)");
@@ -45,6 +73,7 @@ class ViewController: UIViewController
                 display.text = digit
                 userIsInTheMiddleOfTypingANumber = true
                 history.text = brain.description != "?" ? brain.description : " "
+//                history.text = ticker(history.text!)
         }
     }
     
@@ -54,22 +83,17 @@ class ViewController: UIViewController
             enter()
         }
         if let operation = sender.currentTitle {
-            if let result = brain.performOperation(operation) {
-                 displayValue = result
-            } else {
-                // error?
-                displayValue = nil
-            }
-             history.text = history.text!         }
+            brain.performOperation(operation)
+            displayResult = brain.evaluateAndReportErrors()
+        }
     }
     
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
         if let value = displayValue {
-               displayValue = brain.pushOperand(value)
-            } else {
-               displayValue = nil
-        }
+               brain.pushOperand(value)
+            }
+        displayResult = brain.evaluateAndReportErrors()
      }
     
     @IBAction func setVariable(sender: UIButton) {
@@ -78,7 +102,8 @@ class ViewController: UIViewController
         let symbol = dropFirst(sender.currentTitle!)
         if let value = displayValue {
             brain.setVariable(symbol, value: value)
-            displayValue = brain.evaluate()
+            displayResult = brain.evaluateAndReportErrors()
+
         }
     }
     
@@ -86,12 +111,13 @@ class ViewController: UIViewController
         if userIsInTheMiddleOfTypingANumber {
             enter()
         }
-        displayValue = brain.pushOperand(sender.currentTitle!)
+        brain.pushOperand(sender.currentTitle!)
+        displayResult = brain.evaluateAndReportErrors()
     }
     
     @IBAction func clearAll(sender: AnyObject) {
           brain.clearAll()
-          displayValue = nil
+          displayResult = brain.evaluateAndReportErrors()
     }
     
     @IBAction func backSpace(sender: AnyObject) {
@@ -99,10 +125,12 @@ class ViewController: UIViewController
             if countElements(display.text!) > 1 {
                 display.text = dropLast(display.text!)
             } else {
-                displayValue = nil
+                userIsInTheMiddleOfTypingANumber = false
+                displayResult = brain.evaluateAndReportErrors()
             }
         } else {
-            displayValue = brain.popStack()
+            brain.popStack()
+            displayResult = brain.evaluateAndReportErrors()
         }
     }
     
@@ -118,41 +146,7 @@ class ViewController: UIViewController
         }
     }
     
-    var displayValue: Double? {
-        get {
-            if let displayText = display.text {
-                return numberFormatter().numberFromString(displayText)?.doubleValue
-            }
-            return nil
-        }
-        set {
-            if (newValue != nil) {
-                display.text = numberFormatter().stringFromNumber(newValue!)
-            } else {
-                display.text = " "
-            }
-            userIsInTheMiddleOfTypingANumber = false
-            
-         // history.text = brain.displayStack() + " ="
-         // history.text = brain.description + " ="
-            
-            history.text = brain.description1 + " ="
-       
-//---history.text бегущей строкой-----
-            
-            history.text = ticker(history.text!)
-        }
-    }
 
-    func numberFormatter () -> NSNumberFormatter{
-        let numberFormatterLoc = NSNumberFormatter()
-        numberFormatterLoc.numberStyle = .DecimalStyle
-        numberFormatterLoc.maximumFractionDigits = 10
-        numberFormatterLoc.notANumberSymbol = "Error"
-        numberFormatterLoc.groupingSeparator = " "
-        return numberFormatterLoc
-    }
-    
     func ticker (text: String ) -> String {
         var textTicker = text
         let countText = countElements(textTicker)
