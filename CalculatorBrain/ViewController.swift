@@ -22,30 +22,24 @@ class ViewController: UIViewController
     
     var userIsInTheMiddleOfTypingANumber = false
     var brain = CalculatorBrain()
-
-    private struct Constants {
-        static let MaxHistoryTextLength: Int = 35
-    }
    
-    // property storing the evaluation results from the brain model
-    // its Result type defined by enum in the brain model
+    // Свойство, запоминающее результаты оценки стэка,
+    // сделанные в Моделе CalculatorBrain
+    // Его тип Result определен как перечисление enum
+    // в Моделе CalculatorBrain
+    
     var displayResult: CalculatorBrain.Result = .Value(0.0) {
-        // also updates the two IBOutlet text fields
+        // Наблюдатель Свойства модифицирует две IBOutlet метки
         didSet {
-            // using the description property of the
-            // Result enum adhering to the printable protocol
+            // используется свойство description перечисления
+            // enum Result
             display.text = displayResult.description
             userIsInTheMiddleOfTypingANumber = false
-            // history.text = brain.displayStack() + " ="
-            // history.text = brain.description + " ="
-
             history.text = brain.description1 + "="
-            //---history.text бегущей строкой-----
-//            history.text = ticker(history.text!)
         }
     }
     
-    // computed read-only property mirroring UILabel display.text
+    // вычисляемое read-only свойство, отображающее UILabel display.text
     var displayValue: Double? {
         get {
             if let displayText = display.text {
@@ -73,7 +67,6 @@ class ViewController: UIViewController
                 display.text = digit
                 userIsInTheMiddleOfTypingANumber = true
                 history.text = brain.description != "?" ? brain.description : " "
-//                history.text = ticker(history.text!)
         }
     }
     
@@ -144,21 +137,6 @@ class ViewController: UIViewController
         } else {
             operate(sender)
         }
-    }
-    
-
-    func ticker (text: String ) -> String {
-        var textTicker = text
-        let countText = countElements(textTicker)
-        if countText > Constants.MaxHistoryTextLength {
-            textTicker = textTicker[advance(textTicker.startIndex,
-                           countText - Constants.MaxHistoryTextLength )..<textTicker.endIndex]
-            let myStringArr = textTicker.componentsSeparatedByString(" ")
-            var myStringArr1 = myStringArr[1..<myStringArr.count]
-            if !myStringArr1.isEmpty { textTicker =  " ".join(myStringArr1)}
-            textTicker =  "... " + textTicker
-        }
-        return textTicker
     }
 }
 

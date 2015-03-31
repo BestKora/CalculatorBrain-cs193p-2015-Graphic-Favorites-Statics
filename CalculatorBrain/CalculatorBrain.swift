@@ -196,7 +196,6 @@ class CalculatorBrain
                 }
                 var (operand2, remainingOpsOperand2, precedenceOperand2) = description(remainingOps)
                 if op.precedence > precedenceOperand2
-           //         || (op.precedence == precedenceOperand2 && !op.commutative )
                 {
                         operand2 = "(\(operand2))"
                 }
@@ -240,7 +239,7 @@ class CalculatorBrain
         return (nil, ops)
     }
     
-    // recursive helper function for public evaluateAndReportErrors method below
+    // рекурсивная вспомогательная функция для public evaluateAndReportErrors метода ниже
     private func evaluateResult(ops: [Op]) -> (result: Result, remainingOps: [Op]) {
         
         if !ops.isEmpty {
@@ -266,7 +265,8 @@ class CalculatorBrain
                     if let errMessage = errorTest?(operand) {
                         return (.Error(errMessage), remainingOps)
                     }
-                    return (.Value(operation(operand)), operandEvaluation.remainingOps)
+                    return (.Value(operation(operand)),
+                                      operandEvaluation.remainingOps)
                 case .Error(let errMessage):
                     return (.Error(errMessage), remainingOps)
                 }
@@ -280,7 +280,8 @@ class CalculatorBrain
                         if let errMessage = errorTest?(operand1, operand2) {
                             return (.Error(errMessage), op1Evaluation.remainingOps)
                         }
-                        return (.Value(operation(operand1, operand2)), op2Evaluation.remainingOps)
+                        return (.Value(operation(operand1, operand2)),
+                                               op2Evaluation.remainingOps)
                     case .Error(let errMessage):
                         return (.Error(errMessage), op1Evaluation.remainingOps)
                     }
@@ -300,7 +301,7 @@ class CalculatorBrain
     }
     
 
-    // public method returning the evaluation of the opStack using the Type Result
+// public метод, возвращающий оценку стэка, используя Type Result
     func evaluateAndReportErrors() -> Result {
         if !opStack.isEmpty {
             return evaluateResult(opStack).result
