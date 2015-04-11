@@ -115,7 +115,7 @@ class ViewController: UIViewController
     
     @IBAction func backSpace(sender: AnyObject) {
         if userIsInTheMiddleOfTypingANumber {
-            if countElements(display.text!) > 1 {
+            if count(display.text!) > 1 {
                 display.text = dropLast(display.text!)
             } else {
                 userIsInTheMiddleOfTypingANumber = false
