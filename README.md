@@ -6,9 +6,9 @@ Cтэнфордский курс "Разработка iOS 8 приложени�
 
 Отдельные пункты Задания 2 доступны через Releases и Tags
 
-[Окончательный вариант](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](./Assigment2ExtraCredit3New )
+[Окончательный вариант](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](Assigment2ExtraCredit3New )
 
-[Дополнительные пункты 2 и 3](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](./Assigment2ExtraCredit3New)
+[Дополнительные пункты 2 и 3](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](Assigment2ExtraCredit3New)
 
 [Дополнительный пункт 1](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-dopolnitelnye-punkty-1-3/)-> [Assigment2ExtraCredit2New](./Assigment2ExtraCredit2New) 
 
