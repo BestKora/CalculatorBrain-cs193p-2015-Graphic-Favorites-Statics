@@ -12,11 +12,11 @@ Cтэнфордский курс "Разработка iOS 8 приложени�
 
 [Дополнительный пункт 1](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-dopolnitelnye-punkty-1-3/)-> [Assigment2ExtraCredit2New](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2ExtraCredit2New) 
 
-[Обязательные пункты 9 -12](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-obyazatelnye-punkty-9-12/)-> [Assigment2Task9](./Assigment2Task9) 
+[Обязательные пункты 9 -12](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-obyazatelnye-punkty-9-12/)-> [Assigment2Task9](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2Task9) 
 
-[Обязательные пункты 5 -8](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-obyazatelnye-punkty-5-8/)-> [Assigment2Task8](./Assigment2Task8) 
+[Обязательные пункты 5 -8](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-obyazatelnye-punkty-5-8/)-> [Assigment2Task8](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2Task8) 
 
-[Обязательные пункты 1 -4](http://bestkora.com/IosDeveloper/zadanie-2-nachalo/)-> [Assigment2Task4New](./Assigment2Task4New) 
+[Обязательные пункты 1 -4](http://bestkora.com/IosDeveloper/zadanie-2-nachalo/)-> [Assigment2Task4New](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2Task4New) 
 
  Для  Xcode 6.3 iOS 8.3 Swift 1.2
  
