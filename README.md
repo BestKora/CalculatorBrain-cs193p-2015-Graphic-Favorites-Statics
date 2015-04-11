@@ -20,6 +20,8 @@ Cтэнфордский курс "Разработка iOS 8 приложени�
 
  Для  Xcode 6.3 iOS 8.3 Swift 1.2
  
+ [Окончательный вариант Swift 1.2](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2AllSwift12](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2AllSwift12)
+ 
  Заменяем countElements на count в коде
  
   ```swift
