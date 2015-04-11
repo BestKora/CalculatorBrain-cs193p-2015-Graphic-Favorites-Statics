@@ -6,11 +6,11 @@ Cтэнфордский курс "Разработка iOS 8 приложени�
 
 Отдельные пункты Задания 2 доступны через Releases и Tags
 
-[Окончательный вариант](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](CalculatorBrain-cs193p-2015-2/tree/Assigment2ExtraCredit3New )
+[Окончательный вариант](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2ExtraCredit3New)
 
-[Дополнительные пункты 2 и 3](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](CalculatorBrain-cs193p-2015-2/tree/Assigment2ExtraCredit3New)
+[Дополнительные пункты 2 и 3](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-vozvrashhaem-enum-result-dopolnitelnye-punkty-2-3/)-> [Assigment2ExtraCredit3New](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2ExtraCredit3New)
 
-[Дополнительный пункт 1](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-dopolnitelnye-punkty-1-3/)-> [Assigment2ExtraCredit2New](CalculatorBrain-cs193p-2015-2/tree/Assigment2ExtraCredit2New) 
+[Дополнительный пункт 1](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-dopolnitelnye-punkty-1-3/)-> [Assigment2ExtraCredit2New](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assigment2ExtraCredit2New) 
 
 [Обязательные пункты 9 -12](http://bestkora.com/IosDeveloper/zadanie-2-reshenie-prodolzhenie-obyazatelnye-punkty-9-12/)-> [Assigment2Task9](./Assigment2Task9) 
 
