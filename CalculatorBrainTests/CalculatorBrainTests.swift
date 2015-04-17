@@ -18,6 +18,7 @@ class CalculatorBrainTests: XCTestCase {
         XCTAssertEqual(5.2, brain.pushOperand("x")!)
         XCTAssertEqual(10.4, brain.performOperation("+")!)
     }
+
     
     func testDescription() {
         // cos(10)
@@ -173,6 +174,44 @@ class CalculatorBrainTests: XCTestCase {
         XCTAssertEqual(brain.description, "√((3 + 5) × (7 + 8))")
 
     }
+    
+    func testSharedInstance() {
+        let instance = CalculatorFormatter.sharedInstance
+        XCTAssertNotNil(instance, "")
+    }
+    
+    func testSharedInstance_Unique() {
+        let instance1 = CalculatorFormatter()
+        let instance2 = CalculatorFormatter.sharedInstance
+        XCTAssertFalse(instance1 === instance2)
+    }
+    
+    func testSharedInstance_Twice() {
+        let instance1 = CalculatorFormatter.sharedInstance
+        let instance2 = CalculatorFormatter.sharedInstance
+        XCTAssertTrue(instance1 === instance2)
+    }
+    func testSharedInstance_ThreadSafety() {
+        var instance1 : CalculatorFormatter!
+        var instance2 : CalculatorFormatter!
+        
+        let expectation1 = expectationWithDescription("Instance 1")
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            instance1 = CalculatorFormatter.sharedInstance
+            expectation1.fulfill()
+        }
+        let expectation2 = expectationWithDescription("Instance 2")
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            instance2 = CalculatorFormatter.sharedInstance
+            expectation2.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(1.0) { (_) in
+            XCTAssertTrue(instance1 === instance2)
+        }
+    }
+
+
 }
 
 

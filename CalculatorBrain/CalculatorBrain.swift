@@ -12,7 +12,6 @@ import Foundation
 
 class CalculatorBrain
 {
- 
     // enum Resul - либо для значения стэка, либо для сообщения об ошибке
     // public, так как используется ViewController для получения оценки стэка
     enum Result: Printable {
@@ -21,8 +20,8 @@ class CalculatorBrain
         
         var description: String {
             switch self {
-            case .Value(let value):               
-                return  CalculatorBrain.numberFormatter().stringFromNumber(value) ?? ""
+            case .Value(let value):
+                return  CalculatorFormatter.sharedInstance.stringFromNumber(value) ?? ""
             case .Error(let errorMessage):
                 return errorMessage
             }
@@ -79,6 +78,7 @@ class CalculatorBrain
     private var opStack = [Op]()    
     private var knownOps = [String:Op]()
     private var variableValues = [String: Double]()
+
    
     func getVariable(symbol: String) -> Double? {
         return variableValues[symbol]
@@ -134,7 +134,7 @@ class CalculatorBrain
                 for opSymbol in opSymbols {
                     if let op = knownOps[opSymbol]{
                         newOpStack.append(op)
-                    } else if let operand = NSNumberFormatter().numberFromString(opSymbol)?.doubleValue {
+                    } else if let operand = CalculatorFormatter.sharedInstance.numberFromString(opSymbol)?.doubleValue {
                         newOpStack.append(.Operand(operand))
                     }
                 }
@@ -178,7 +178,7 @@ class CalculatorBrain
             switch op {
                 
             case .Operand(let operand):
-                return (CalculatorBrain.numberFormatter().stringFromNumber(operand) ?? "", remainingOps, op.precedence)
+                return (CalculatorFormatter.sharedInstance.stringFromNumber(operand) ?? "", remainingOps, op.precedence)
                 
             case .ConstantOperation(let symbol, _):
                 return (symbol, remainingOps, op.precedence)
@@ -337,16 +337,33 @@ class CalculatorBrain
     func displayStack() -> String {
         return opStack.isEmpty ? "" : " ".join(opStack.map{ $0.description })
     }
+}
+
+class CalculatorFormatter: NSNumberFormatter {
     
-    
-   class func numberFormatter () -> NSNumberFormatter {
-        let numberFormatterLoc = NSNumberFormatter()
-        numberFormatterLoc.numberStyle = .DecimalStyle
-        numberFormatterLoc.maximumFractionDigits = 10
-        numberFormatterLoc.notANumberSymbol = "Error"
-        numberFormatterLoc.groupingSeparator = " "
-        return numberFormatterLoc
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
+    
+    override init() {
+        super.init()
+        self.locale = NSLocale.currentLocale()
+        self.numberStyle = .DecimalStyle
+        self.maximumFractionDigits = 10
+        self.notANumberSymbol = "Error"
+        self.groupingSeparator = " "
+        
+    }
+    
+    // Swift 1.2 or above
+    static let sharedInstance = CalculatorFormatter()
 
-
+    // Swift 1.1
+/*    class var sharedInstance: CalculatorFormatter {
+        struct Static {
+            static let instance = CalculatorFormatter()
+        }
+        return Static.instance
+    }*/
+    
 }

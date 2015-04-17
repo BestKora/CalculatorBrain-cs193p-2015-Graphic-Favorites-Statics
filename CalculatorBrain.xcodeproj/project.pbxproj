@@ -39,6 +39,7 @@
 		E48677D91A83DC010087A9CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48677DA1A83DC010087A9CA /* CalculatorBrainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorBrainTests.swift; sourceTree = "<group>"; };
 		E48677E41A83DC7D0087A9CA /* CalculatorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
+		E4F977461AE14C7C00957AE3 /* Calculator.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Calculator.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +81,7 @@
 		E48677C11A83DC010087A9CA /* CalculatorBrain */ = {
 			isa = PBXGroup;
 			children = (
+				E4F977461AE14C7C00957AE3 /* Calculator.playground */,
 				E48677C61A83DC010087A9CA /* ViewController.swift */,
 				E48677E41A83DC7D0087A9CA /* CalculatorBrain.swift */,
 				E48677C81A83DC010087A9CA /* Main.storyboard */,
@@ -347,6 +349,7 @@
 				INFOPLIST_FILE = CalculatorBrain/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 			};
 			name = Debug;
 		};
@@ -357,6 +360,7 @@
 				INFOPLIST_FILE = CalculatorBrain/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = NO;
 			};
 			name = Release;
 		};
