@@ -36,4 +36,5 @@ Cтэнфордский курс "Разработка iOS 8 приложени�
     }
 ```
 Singleton для NSNumberFormatter - дополнение к Заданию 2 стэнфордского курса CS193P "Разработка iOS 8 прложений в Swift"
+
 [Singleton  для NSNumberFormatter](http://bestkora.com/IosDeveloper/kak-sozdat-nsnumberformatter-singleton-v-swift/) -> [Assignment2Singleton](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assignment2Singleton)
