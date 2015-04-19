@@ -67,5 +67,10 @@ class CalculatorFormatter: NSNumberFormatter {
     }*/
 }
 ```
+[Singleton для NSNumberFormatter Глобальная константа] (http://bestkora.com/IosDeveloper/kak-sozdat-nsnumberformatter-singleton-v-swift/) -> [Assignment2SingletonGlobal](https://github.com/BestKora/CalculatorBrain-cs193p-2015-2/tree/Assignment2SingletonGlobal)
+
+ ```swift
+ let formatter = CalculatorFormatter()
+ ```
 
 
