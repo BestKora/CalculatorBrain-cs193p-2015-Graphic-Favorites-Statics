@@ -33,7 +33,6 @@ println(CalculatorFormatter.sharedInstance)
 
 println(CalculatorFormatter.sharedInstance)
 
-
 println(CalculatorFormatter.sharedInstance.stringFromNumber(20.00) ?? "")
 println(CalculatorFormatter.sharedInstance.stringFromNumber(55550) ?? "")
 
@@ -54,3 +53,11 @@ class CalculatorBrain
         }
     }
 }
+
+// ГЛОБАЛЬНАЯ КОНСТАНТА
+
+let formatter = CalculatorFormatter()
+println(formatter)
+println(formatter)
+println(formatter.stringFromNumber(20.00) ?? "")
+println(formatter.stringFromNumber(55550) ?? "")

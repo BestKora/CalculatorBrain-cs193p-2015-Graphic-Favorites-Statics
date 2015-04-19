@@ -21,7 +21,7 @@ class CalculatorBrain
         var description: String {
             switch self {
             case .Value(let value):
-                return  CalculatorFormatter.sharedInstance.stringFromNumber(value) ?? ""
+                return  formatter.stringFromNumber(value) ?? ""
             case .Error(let errorMessage):
                 return errorMessage
             }
@@ -134,7 +134,7 @@ class CalculatorBrain
                 for opSymbol in opSymbols {
                     if let op = knownOps[opSymbol]{
                         newOpStack.append(op)
-                    } else if let operand = CalculatorFormatter.sharedInstance.numberFromString(opSymbol)?.doubleValue {
+                    } else if let operand = formatter.numberFromString(opSymbol)?.doubleValue {
                         newOpStack.append(.Operand(operand))
                     }
                 }
@@ -178,7 +178,7 @@ class CalculatorBrain
             switch op {
                 
             case .Operand(let operand):
-                return (CalculatorFormatter.sharedInstance.stringFromNumber(operand) ?? "", remainingOps, op.precedence)
+                return (formatter.stringFromNumber(operand) ?? "", remainingOps, op.precedence)
                 
             case .ConstantOperation(let symbol, _):
                 return (symbol, remainingOps, op.precedence)
@@ -367,3 +367,5 @@ class CalculatorFormatter: NSNumberFormatter {
     }*/
     
 }
+
+let formatter = CalculatorFormatter()

@@ -18,7 +18,7 @@ class ViewController: UIViewController
         }
     }
  
-    let decimalSeparator =  CalculatorFormatter.sharedInstance.decimalSeparator ?? "."
+    let decimalSeparator = formatter.decimalSeparator ?? "."
     
     var userIsInTheMiddleOfTypingANumber = false
     var brain = CalculatorBrain()
@@ -43,7 +43,7 @@ class ViewController: UIViewController
     var displayValue: Double? {
         get {
             if let displayText = display.text {
-                return CalculatorFormatter.sharedInstance.numberFromString(displayText)?.doubleValue
+                return formatter.numberFromString(displayText)?.doubleValue
             }
             return nil
         }
@@ -139,4 +139,3 @@ class ViewController: UIViewController
         }
     }
 }
-
