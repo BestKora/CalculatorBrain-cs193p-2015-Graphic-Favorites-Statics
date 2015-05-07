@@ -5,14 +5,19 @@
 
 import UIKit
 
-@IBDesignable
+protocol GraphViewDataSource: class {
+    func y(x: CGFloat) -> CGFloat?
+}
 
+@IBDesignable
 class GraphView: UIView {
     let axesDrawer = AxesDrawer(color: UIColor.blueColor())
     
     private var graphCenter: CGPoint {
         return convertPoint(center, fromView: superview)
     }
+    
+    weak var dataSource: GraphViewDataSource?
 
     @IBInspectable
     var scale: CGFloat = 50.0 { didSet { setNeedsDisplay() } }
@@ -28,6 +33,35 @@ class GraphView: UIView {
         axesDrawer.contentScaleFactor = contentScaleFactor
         axesDrawer.drawAxesInRect(bounds, origin: origin ?? graphCenter,
                                    pointsPerUnit: scale)
+        drawCurveInRect(bounds, origin: origin ?? graphCenter, pointsPerUnit: scale)
+    }
+    
+    func drawCurveInRect(bounds: CGRect, origin: CGPoint, pointsPerUnit: CGFloat){
+        color.set()
+        let path = UIBezierPath()
+        path.lineWidth = lineWidth
+        var point = CGPoint()
+        
+        var firstValue = true
+        for var i = 0; i <= Int(bounds.size.width * contentScaleFactor); i++ {
+            point.x = CGFloat(i) / contentScaleFactor
+            if let y = dataSource?.y((point.x - origin.x) / scale) {
+                if !y.isNormal && !y.isZero {
+                    firstValue = true
+                    continue
+                }
+                point.y = origin.y - y * scale
+                if firstValue {
+                    path.moveToPoint(point)
+                    firstValue = false
+                } else {
+                    path.addLineToPoint(point)
+                }
+            } else {
+                firstValue = true
+            }
+        }
+        path.stroke()
     }
     
     func scale(gesture: UIPinchGestureRecognizer) {
