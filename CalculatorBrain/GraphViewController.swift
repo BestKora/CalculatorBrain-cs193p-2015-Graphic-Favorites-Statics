@@ -25,36 +25,30 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         }
     }
     
-    // Свойство, запоминающее результаты оценки стэка,
-    // сделанные в Моделе CalculatorBrain
-    // Его тип Result определен как перечисление enum
-    // в Моделе CalculatorBrain
-    
-    var displayResult: CalculatorBrain.Result  = .Value(0.0)
-    
+ 
     private var brain = CalculatorBrain()
     
     typealias PropertyList = AnyObject
     var program: PropertyList? { didSet {
         brain.setVariable("M", value: 0)
         brain.program = program!
-        title = brain.description == "" ? "Graph" : brain.description
         updateUI()
         }
     }
     
     func updateUI() {
         graphView?.setNeedsDisplay()
+        title = brain.description != "?" ? brain.description : "График"
     }
 
 // dataSource метод протокола GraphViewDataSource
     func y(x: CGFloat) -> CGFloat? {
-        brain.setVariable("M", value: Double(x))
-        displayResult = brain.evaluateAndReportErrors()
-        switch displayResult {
-        case .Value(let y): return CGFloat(y)
-        case .Error: return nil
+        brain.setVariable("M", value: Double (x))
+        if let y = brain.evaluate() {
+            return CGFloat(y)
         }
+        return nil
+
     }
 /*
     func y(x: CGFloat) -> CGFloat? {

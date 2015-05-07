@@ -155,6 +155,5 @@ class CalculatorViewController: UIViewController
             }
         }
     }
-    
 
 }

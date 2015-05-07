@@ -21,7 +21,6 @@ class GraphView: UIView {
 
     @IBInspectable
     var scale: CGFloat = 50.0 { didSet { setNeedsDisplay() } }
-    @IBInspectable
     var origin: CGPoint? { didSet { setNeedsDisplay() }}
     @IBInspectable
     var lineWidth: CGFloat = 2.0 { didSet { setNeedsDisplay() } }
@@ -30,10 +29,10 @@ class GraphView: UIView {
 
     
     override func drawRect(rect: CGRect) {
+        origin =  origin ?? graphCenter
         axesDrawer.contentScaleFactor = contentScaleFactor
-        axesDrawer.drawAxesInRect(bounds, origin: origin ?? graphCenter,
-                                   pointsPerUnit: scale)
-        drawCurveInRect(bounds, origin: origin ?? graphCenter, pointsPerUnit: scale)
+        axesDrawer.drawAxesInRect(bounds, origin: origin!, pointsPerUnit: scale)
+        drawCurveInRect(bounds, origin: origin!, pointsPerUnit: scale)
     }
     
     func drawCurveInRect(bounds: CGRect, origin: CGPoint, pointsPerUnit: CGFloat){
