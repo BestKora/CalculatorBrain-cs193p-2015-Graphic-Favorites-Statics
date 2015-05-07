@@ -136,6 +136,8 @@ class CalculatorBrain
                         newOpStack.append(op)
                     } else if let operand = formatter.numberFromString(opSymbol)?.doubleValue {
                         newOpStack.append(.Operand(operand))
+                    } else {
+                        newOpStack.append(.Variable(opSymbol))
                     }
                 }
                 opStack = newOpStack
