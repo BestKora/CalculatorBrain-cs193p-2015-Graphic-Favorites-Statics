@@ -25,16 +25,19 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         }
     }
     
- 
+    private var cashData = [CGFloat : CGFloat]() 
     private var brain = CalculatorBrain()
     
     typealias PropertyList = AnyObject
+    
     var program: PropertyList? { didSet {
         brain.setVariable("M", value: 0)
         brain.program = program!
+        cashData = [CGFloat : CGFloat]()
         updateUI()
         }
     }
+    
     
     func updateUI() {
         graphView?.setNeedsDisplay()
@@ -43,8 +46,11 @@ class GraphViewController: UIViewController, GraphViewDataSource {
 
 // dataSource метод протокола GraphViewDataSource
     func y(x: CGFloat) -> CGFloat? {
+        if let yCash = cashData [x] {return yCash}
+        
         brain.setVariable("M", value: Double (x))
         if let y = brain.evaluate() {
+            cashData [x] = CGFloat(y)
             return CGFloat(y)
         }
         return nil
