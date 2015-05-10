@@ -82,7 +82,7 @@ class GraphView: UIView {
         }
     }
     
-    func originMove(gesture: UIPanGestureRecognizer) {
+    func originMove1(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .Began:
             lightAxes = true
@@ -122,14 +122,14 @@ class GraphView: UIView {
         default: break
         }
     }
-    
-    func originMove1(gesture: UIPanGestureRecognizer) {
+
+    func originMove(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .Began:
             lightAxes = true
             lightCurve = true
             snapshot = self.snapshotViewAfterScreenUpdates(false)
-            snapshot!.alpha = 0.1
+            snapshot!.alpha = 0.4
             self.addSubview(snapshot!)
         case .Changed:
             let translation = gesture.translationInView(self)
