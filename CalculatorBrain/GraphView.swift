@@ -68,7 +68,7 @@ class GraphView: UIView {
         path.stroke()
     }
     
-    func scale(gesture: UIPinchGestureRecognizer) {
+    func scale1(gesture: UIPinchGestureRecognizer) {
          switch gesture.state {
         case .Began:
            lightAxes = true
@@ -98,7 +98,7 @@ class GraphView: UIView {
         }
     }
     
-    func scale1(gesture: UIPinchGestureRecognizer) {
+    func scale(gesture: UIPinchGestureRecognizer) {
         switch gesture.state {
         case .Began:
             snapshot = self.snapshotViewAfterScreenUpdates(false)
@@ -116,9 +116,9 @@ class GraphView: UIView {
             scale *= changedScale
             origin?.x = origin!.x * changedScale + snapshot!.frame.origin.x
             origin?.y = origin!.y * changedScale + snapshot!.frame.origin.y
-            
             snapshot!.removeFromSuperview()
             snapshot = nil
+            setNeedsDisplay()
         default: break
         }
     }
