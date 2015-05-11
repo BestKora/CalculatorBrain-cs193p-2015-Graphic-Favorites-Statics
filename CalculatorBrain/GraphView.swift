@@ -15,27 +15,42 @@ class GraphView: UIView {
 
     @IBInspectable
     var scale: CGFloat = 50.0 { didSet { setNeedsDisplay() } }
-    var origin: CGPoint? { didSet { setNeedsDisplay() }}
+    var originRelativeToCenter:CGPoint = CGPointZero { didSet {setNeedsDisplay()}}
+    private var graphCenter: CGPoint {
+        return convertPoint(center, fromView: superview)
+    }
+    var origin: CGPoint  {
+        get {
+            var origin = originRelativeToCenter
+            origin.x += graphCenter.x
+            origin.y += graphCenter.y
+            return origin
+        }
+        set {
+                var origin = newValue
+                origin.x -= graphCenter.x
+                origin.y -= graphCenter.y
+                originRelativeToCenter = origin
+         }
+    }
     @IBInspectable
     var lineWidth: CGFloat = 2.0 { didSet { setNeedsDisplay() } }
     @IBInspectable
     var color: UIColor = UIColor.blackColor() { didSet { setNeedsDisplay() } }
     
     private let axesDrawer = AxesDrawer(color: UIColor.blueColor())
-    private var graphCenter: CGPoint {
-        return convertPoint(center, fromView: superview)
-    }
     private var lightAxes:Bool = false // рисуем и оцифровываем засечки на осях
     private var lightCurve:Bool = false // рисуем график
 
     private var snapshot:UIView?
+   
     
     override func drawRect(rect: CGRect) {
-        origin =  origin ?? graphCenter
         axesDrawer.contentScaleFactor = contentScaleFactor
-        axesDrawer.drawAxesInRect(bounds, origin: origin!, pointsPerUnit: scale, light: lightAxes)
+        axesDrawer.drawAxesInRect(bounds, origin: origin, pointsPerUnit: scale,
+                                                                  light: lightAxes)
         if !lightCurve {
-            drawCurveInRect(bounds, origin: origin!, pointsPerUnit: scale)}
+            drawCurveInRect(bounds, origin: origin, pointsPerUnit: scale)}
     }
     
     func drawCurveInRect(bounds: CGRect, origin: CGPoint, pointsPerUnit: CGFloat){
@@ -87,8 +102,8 @@ class GraphView: UIView {
             lightAxes = true
         case .Changed:
             let translation = gesture.translationInView(self)
-            origin?.x += translation.x
-            origin?.y += translation.y
+            origin.x += translation.x
+            origin.y += translation.y
             gesture.setTranslation(CGPointZero, inView: self)
         case .Ended:
             lightAxes = false
@@ -113,8 +128,8 @@ class GraphView: UIView {
         case .Ended:
             let changedScale = snapshot!.frame.height / self.frame.height
             scale *= changedScale
-            origin?.x = origin!.x * changedScale + snapshot!.frame.origin.x
-            origin?.y = origin!.y * changedScale + snapshot!.frame.origin.y
+            origin.x = origin.x * changedScale + snapshot!.frame.origin.x
+            origin.y = origin.y * changedScale + snapshot!.frame.origin.y
             snapshot!.removeFromSuperview()
             snapshot = nil
             setNeedsDisplay()
@@ -133,8 +148,8 @@ class GraphView: UIView {
         case .Changed:
             let translation = gesture.translationInView(self)
             if translation != CGPointZero {
-                origin?.x += translation.x
-                origin?.y += translation.y
+                origin.x += translation.x
+                origin.y += translation.y
                 gesture.setTranslation(CGPointZero, inView: self)
             }
         case .Ended:

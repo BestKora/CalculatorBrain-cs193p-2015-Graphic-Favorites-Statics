@@ -22,7 +22,7 @@ class GraphViewController: UIViewController, GraphViewDataSource {
             graphView.addGestureRecognizer(tap)
             
             graphView.scale = scale
-            graphView.origin = origin
+            graphView.originRelativeToCenter = originRelative
             updateUI()
         }
     }
@@ -69,28 +69,24 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         set { defaults.setObject(newValue, forKey: Keys.Scale) }
     }
     
-    private var origin: CGPoint? {
+    private var originRelative: CGPoint {
         get {
-            var origin = CGPoint ()
+            var origin = CGPointZero
             if let originArray = defaults.objectForKey(Keys.Origin) as? [CGFloat] {
                 origin.x = originArray.first!
                 origin.y = originArray.last!
-                return origin
-            } else {
-                return nil
             }
+            return origin
         }
         set {
-            if let newOrigin = newValue {
-                defaults.setObject([newOrigin.x, newOrigin.y], forKey: Keys.Origin)
-            }
+                defaults.setObject([newValue.x, newValue.y], forKey: Keys.Origin)
         }
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         scale = graphView.scale
-        origin = graphView.origin
+        originRelative = graphView.originRelativeToCenter
     }
     
 }
