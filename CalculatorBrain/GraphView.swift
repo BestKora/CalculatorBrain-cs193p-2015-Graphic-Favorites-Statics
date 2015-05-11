@@ -11,12 +11,7 @@ protocol GraphViewDataSource: class {
 
 @IBDesignable
 class GraphView: UIView {
-    let axesDrawer = AxesDrawer(color: UIColor.blueColor())
-    
-    private var graphCenter: CGPoint {
-        return convertPoint(center, fromView: superview)
-    }
-       weak var dataSource: GraphViewDataSource?
+    weak var dataSource: GraphViewDataSource?
 
     @IBInspectable
     var scale: CGFloat = 50.0 { didSet { setNeedsDisplay() } }
@@ -26,6 +21,10 @@ class GraphView: UIView {
     @IBInspectable
     var color: UIColor = UIColor.blackColor() { didSet { setNeedsDisplay() } }
     
+    private let axesDrawer = AxesDrawer(color: UIColor.blueColor())
+    private var graphCenter: CGPoint {
+        return convertPoint(center, fromView: superview)
+    }
     private var lightAxes:Bool = false // рисуем и оцифровываем засечки на осях
     private var lightCurve:Bool = false // рисуем график
 
