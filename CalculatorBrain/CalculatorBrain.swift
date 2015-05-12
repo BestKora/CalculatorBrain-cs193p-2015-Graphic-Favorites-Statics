@@ -110,14 +110,27 @@ class CalculatorBrain
           { divisor, _ in return divisor == 0.0 ? "Деление на ноль" : nil }))
         learnOp(Op.BinaryOperation("+", 1, true, +, nil))
         learnOp(Op.BinaryOperation("−", 1, false, { $1 - $0}, nil))
+        learnOp(Op.BinaryOperation("^", 3, false, {pow($1, $0)}, nil))
         
         learnOp(Op.UnaryOperation("√", sqrt,
                                    { $0 < 0 ? "√ отриц. числа" : nil }))
         learnOp(Op.UnaryOperation("sin", sin, nil))
         learnOp(Op.UnaryOperation("cos", cos, nil))
+        learnOp(Op.UnaryOperation("tan",tan, nil))
+        learnOp(Op.UnaryOperation("asin",asin, nil))
+        learnOp(Op.UnaryOperation("acos",acos, nil))
+        learnOp(Op.UnaryOperation("atan",atan, nil))
+        learnOp(Op.UnaryOperation("exp",exp, nil))
+        learnOp(Op.UnaryOperation("ln",log, nil))
+        learnOp(Op.UnaryOperation("2log",log2, nil))
+        learnOp(Op.UnaryOperation("inv", {1.0 / $0},
+            {divisor in return divisor == 0.0 ? "Деление на ноль" : nil}))
+
         learnOp(Op.UnaryOperation("±", { -$0 }, nil))
         
         learnOp(Op.ConstantOperation("π", { M_PI }))
+        learnOp(Op.ConstantOperation("e") {M_E})
+
     }
     
 
