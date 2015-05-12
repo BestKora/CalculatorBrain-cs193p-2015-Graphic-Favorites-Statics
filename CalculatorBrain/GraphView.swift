@@ -119,7 +119,7 @@ class GraphView: UIView {
         path.stroke()
     }
     
-    func scale1(gesture: UIPinchGestureRecognizer) {
+    func scale(gesture: UIPinchGestureRecognizer) {
          switch gesture.state {
         case .Began:
            lightAxes = true
@@ -149,7 +149,7 @@ class GraphView: UIView {
         }
     }
     
-    func scale(gesture: UIPinchGestureRecognizer) {
+    func scale2(gesture: UIPinchGestureRecognizer) {
         switch gesture.state {
         case .Began:
             snapshot = self.snapshotViewAfterScreenUpdates(false)
