@@ -5,6 +5,37 @@
 
 import UIKit
 
+struct Statistics:Printable {
+    var description :String {
+        formatter.maximumFractionDigits = 5
+        let minString =  " \n min = " + formatter.stringFromNumber(min)!
+        let maxString =  " \n max = " + formatter.stringFromNumber(max)!
+        let avgString =  " \n avg = " + formatter.stringFromNumber(avg)!
+        let string = "num = \(num)" +
+                            minString +
+                            maxString +
+                            avgString + " \n"
+        formatter.maximumFractionDigits = 10
+        return string
+    }
+    
+    var num: Int = 0
+    var avg: CGFloat = 0
+    var min: CGFloat = 0
+    var max: CGFloat = 0
+    
+    mutating func calculate (y:CGFloat) {
+        if num == 0 {
+            min = y
+            max = y
+        }
+        num++
+        avg = avg + (y - avg) / CGFloat(num)
+        if y < min {min = y}
+        if y > max {max = y}
+    }
+}
+
 protocol GraphViewDataSource: class {
     func y(x: CGFloat) -> CGFloat?
 }
@@ -16,10 +47,16 @@ class GraphView: UIView {
     @IBInspectable
     var scale: CGFloat = 50.0 { didSet { setNeedsDisplay() } }
     var originRelativeToCenter:CGPoint = CGPointZero { didSet {setNeedsDisplay()}}
+    @IBInspectable
+    var lineWidth: CGFloat = 2.0 { didSet { setNeedsDisplay() } }
+    @IBInspectable
+    var color: UIColor = UIColor.blackColor() { didSet { setNeedsDisplay() } }
+    var statistics:Statistics = Statistics ()
+    
     private var graphCenter: CGPoint {
         return convertPoint(center, fromView: superview)
     }
-    var origin: CGPoint  {
+    private var origin: CGPoint  {
         get {
             var origin = originRelativeToCenter
             origin.x += graphCenter.x
@@ -27,17 +64,12 @@ class GraphView: UIView {
             return origin
         }
         set {
-                var origin = newValue
-                origin.x -= graphCenter.x
-                origin.y -= graphCenter.y
-                originRelativeToCenter = origin
-         }
+            var origin = newValue
+            origin.x -= graphCenter.x
+            origin.y -= graphCenter.y
+            originRelativeToCenter = origin
+        }
     }
-    @IBInspectable
-    var lineWidth: CGFloat = 2.0 { didSet { setNeedsDisplay() } }
-    @IBInspectable
-    var color: UIColor = UIColor.blackColor() { didSet { setNeedsDisplay() } }
-    
     private let axesDrawer = AxesDrawer(color: UIColor.blueColor())
     private var lightAxes:Bool = false // рисуем и оцифровываем засечки на осях
     private var lightCurve:Bool = false // рисуем график
@@ -58,9 +90,11 @@ class GraphView: UIView {
         let path = UIBezierPath()
         path.lineWidth = lineWidth
         var point = CGPoint()
-        
         var firstValue = true
-        for var i = 0; i <= Int(bounds.size.width * contentScaleFactor); i++ {  //i = i + 10
+        // --- обнуление statistics
+        statistics = Statistics ()
+
+        for var i = 0; i <= Int(bounds.size.width * contentScaleFactor); i++ {
          
             point.x = CGFloat(i) / contentScaleFactor
             if let y = dataSource?.y((point.x - origin.x) / scale) {
@@ -68,6 +102,9 @@ class GraphView: UIView {
                     firstValue = true
                     continue
                 }
+                //------- расчет statistics
+                statistics.calculate(y)
+ 
                 point.y = origin.y - y * scale
                 if firstValue {
                     path.moveToPoint(point)

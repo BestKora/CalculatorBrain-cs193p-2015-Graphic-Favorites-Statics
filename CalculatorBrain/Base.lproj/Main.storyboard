@@ -527,10 +527,10 @@
             </objects>
             <point key="canvasLocation" x="1322" y="-175"/>
         </scene>
-        <!--Graph View Controller-->
+        <!--Statistics Graph View Controller-->
         <scene sceneID="Nlk-7R-EOe">
             <objects>
-                <viewController id="nHi-0K-XPY" customClass="GraphViewController" customModule="CalculatorBrain" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nHi-0K-XPY" customClass="StatisticsGraphViewController" customModule="CalculatorBrain" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kJY-pB-a6X"/>
                         <viewControllerLayoutGuide type="bottom" id="M4x-Dn-mcA"/>
@@ -563,7 +563,15 @@
                             <constraint firstItem="ycJ-2K-qty" firstAttribute="top" secondItem="kJY-pB-a6X" secondAttribute="bottom" id="oiL-kc-OCZ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="xq3-AH-P5x"/>
+                    <navigationItem key="navigationItem" id="xq3-AH-P5x">
+                        <barButtonItem key="rightBarButtonItem" title="Statistics" id="Gu8-qo-cdy">
+                            <connections>
+                                <segue destination="K4j-kg-5DB" kind="popoverPresentation" identifier="Show Statistics" popoverAnchorBarButtonItem="Gu8-qo-cdy" id="U65-bF-W5A">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="graphView" destination="ycJ-2K-qty" id="gFg-30-PBh"/>
                     </connections>
@@ -620,6 +628,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aqa-Y9-APf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="628" y="551"/>
+        </scene>
+        <!--Text View Controller-->
+        <scene sceneID="vrS-hp-1Yw">
+            <objects>
+                <viewController id="K4j-kg-5DB" customClass="TextViewController" customModule="CalculatorBrain" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qK4-Op-ofF"/>
+                        <viewControllerLayoutGuide type="bottom" id="FOo-h8-WOq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UPK-KP-CzK">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOr-kQ-YZj">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="EOr-kQ-YZj" firstAttribute="bottom" secondItem="FOo-h8-WOq" secondAttribute="top" id="56G-MU-zbX"/>
+                            <constraint firstAttribute="trailing" secondItem="EOr-kQ-YZj" secondAttribute="trailing" id="FpJ-pK-IHG"/>
+                            <constraint firstItem="EOr-kQ-YZj" firstAttribute="top" secondItem="UPK-KP-CzK" secondAttribute="top" id="OYa-SL-zdg"/>
+                            <constraint firstItem="EOr-kQ-YZj" firstAttribute="leading" secondItem="UPK-KP-CzK" secondAttribute="leading" id="xFQ-wQ-oeH"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="EOr-kQ-YZj" id="DPq-fr-M00"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dHV-wH-GT2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2051" y="63"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
