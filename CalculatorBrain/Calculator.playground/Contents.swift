@@ -61,3 +61,23 @@ println(formatter)
 println(formatter)
 println(formatter.stringFromNumber(20.00) ?? "")
 println(formatter.stringFromNumber(55550) ?? "")
+
+func RandomShape(size : CGSize) -> UIBezierPath {
+    func RandomFloat() -> CGFloat {return CGFloat(arc4random()) / CGFloat(UINT32_MAX)}
+    func RandomPoint() -> CGPoint {return CGPointMake(size.width * RandomFloat(), size.height * RandomFloat())}
+    let path = UIBezierPath(); path.moveToPoint(RandomPoint())
+    for _ in 0..<(3 + Int(arc4random_uniform(numericCast(10)))) {
+        switch (random() % 3) {
+        case 0: path.addLineToPoint(RandomPoint())
+        case 1: path.addQuadCurveToPoint(RandomPoint(), controlPoint: RandomPoint())
+        case 2: path.addCurveToPoint(RandomPoint(), controlPoint1: RandomPoint(), controlPoint2: RandomPoint())
+        default: break;
+        }
+    }
+    path.closePath()
+    return path
+}
+let mySize = CGSize (width: 150, height: 150)
+RandomShape(mySize)
+var alphabet = (65..<65 + 26).map{String(UnicodeScalar($0))}
+println("\(alphabet)")

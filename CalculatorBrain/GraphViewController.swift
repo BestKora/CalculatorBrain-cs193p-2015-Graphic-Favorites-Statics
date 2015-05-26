@@ -8,11 +8,12 @@
 
 import UIKit
 
-class GraphViewController: UIViewController, GraphViewDataSource {
+
+class GraphViewController: UIViewController {
     
     @IBOutlet weak var graphView: GraphView! {
         didSet {
-            graphView.dataSource = self
+
             graphView.addGestureRecognizer(UIPinchGestureRecognizer(target: graphView,
                 action: "scale:"))
             graphView.addGestureRecognizer(UIPanGestureRecognizer(target: graphView,
@@ -23,24 +24,34 @@ class GraphViewController: UIViewController, GraphViewDataSource {
             
             graphView.scale = scale
             graphView.originRelativeToCenter = originRelative
+            
+            graphView.yForX =  { [unowned self](x:Double)  in
+                self.brain.setVariable("M", value: Double (x))
+                return self.brain.evaluate()
+            }
+
             updateUI()
         }
     }
     
     
     typealias PropertyList = AnyObject
-    var program: PropertyList? { didSet {
-        brain.setVariable("M", value: 0)
-        brain.program = program!
-        cashData = [CGFloat : CGFloat]()
-        updateUI()
+    var program: PropertyList? {
+        didSet {
+            brain.setVariable("M", value: 0)
+            brain.program = program!
+            let descript = brain.description.componentsSeparatedByString(",").last ?? " "
+            title = "y = " + descript ?? " "
+            cashData = [CGFloat : CGFloat]()
+            updateUI()
         }
     }
     
     private var cashData = [CGFloat : CGFloat]()
-    private var brain = CalculatorBrain()
     
-    private let defaults = NSUserDefaults.standardUserDefaults()
+    var brain = CalculatorBrain()
+    
+    let defaults = NSUserDefaults.standardUserDefaults()
     private struct Keys {
         static let Scale = "GraphViewController.Scale"
         static let Origin = "GraphViewController.Origin"
@@ -49,21 +60,8 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     
     func updateUI() {
         graphView?.setNeedsDisplay()
-        title = brain.description != "?" ? brain.description : "График"
     }
 
-    // dataSource метод протокола GraphViewDataSource
-    func y(x: CGFloat) -> CGFloat? {
-        if let yCash = cashData [x] {return yCash}
-        
-        brain.setVariable("M", value: Double (x))
-        if let y = brain.evaluate() {
-            cashData [x] = CGFloat(y)
-            return CGFloat(y)
-        }
-        return nil
-    }
-    
     private var scale: CGFloat {
         get { return defaults.objectForKey(Keys.Scale) as? CGFloat ?? 50.0 }
         set { defaults.setObject(newValue, forKey: Keys.Scale) }
@@ -90,4 +88,3 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     }
     
 }
-
